@@ -435,7 +435,7 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             height: 50
         };
         this.image = new Image();
-        this.image.onload = this.onload();
+        this.image.onload = this.onload;
         for (var i in e){
             this[i] = e[i];
         }
