@@ -1,20 +1,22 @@
+* Purge
+* depth
+* setDirty
+* ~~NonResizing list~~
+* ~~Text Justify~~
 * ~~View~~
 * ~~Paint~~
-* setDirty
 * ~~frame~~
 * ~~computeFrame~~
 * ~~superview~~
 * ~~setFrame~~
 * ~~%w %h x y~~
 * ~~subviews~~
-* depth
-* ImageView
+* ~~ImageView~~
 * ~~TextView~~
-* ScrollView
+* ~~ScrollView~~
 * ~~ResizingView~~
-* ListView
-* hitTest
+* ~~ListView~~
+* ~~hitTest~~
 * ~~GameLoop~~
-* Purge
 * ~~BackgroundColor~~
 * ~~StrokeColor~~
