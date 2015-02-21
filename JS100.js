@@ -205,6 +205,7 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
         color: "black",
         willResize: true,
         fontSize: 15,
+        justify:"left",
         font: "Verdana, Geneva, sans-serif",
         paint: function(){
             var canvas = this.getCanvas();
@@ -216,7 +217,20 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             ctx.textBaseline = "hanging";
             var lines = this.generateLines();
             for (var i = 0; i < lines.length; i++){
-                ctx.fillText(lines[i],0,i*this.fontSize);
+                var x;
+                switch(this.justify){
+                    default:
+                    case "left":
+                        x = 0;
+                        break;
+                    case "right":
+                        x = canvas.width - ctx.measureText(lines[i]).width;
+                        break;
+                    case "center":
+                        x = (canvas.width - ctx.measureText(lines[i]).width)/2;
+                        break;
+                }
+                ctx.fillText(lines[i],x,i*this.fontSize);
             }
 
             //ctx.fillText(this.text,0,0);

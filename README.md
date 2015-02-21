@@ -1,8 +1,8 @@
 * Purge
-* Text Justify
 * depth
 * setDirty
-
+* NonResizing list
+* ~~Text Justify~~
 * ~~View~~
 * ~~Paint~~
 * ~~frame~~
