@@ -197,6 +197,9 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             this[i] = e[i];
         }
     };
+
+
+
     TextView.prototype = merge(View.prototype,{
         text: "test",
         color: "black",
@@ -369,7 +372,45 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             }
         }
     });
-    canvas.addEventListener("wheel",eventPasser);
+    ImageView = function(e){
+        this.metrics = {
+            x: 0,
+            y: 0,
+            width: 50,
+            height: 50
+        };
+        this.frame = {
+            x: 0,
+            y: 0,
+            width: 50,
+            height: 50
+        };
+        this.image = new Image();
+        this.image.onload = this.onload();
+        for (var i in e){
+            this[i] = e[i];
+        }
+        if (this.src.length > 0)
+            this.image.src = this.src;
+    };
+    ImageView.prototype = merge(View.prototype, {
+        paint: function(){
+            var canvas = this.getCanvas();
+            if (this.image)
+                canvas.getContext('2d').drawImage(this.image,0,0,canvas.width,canvas.height);
+            return canvas;
+        },
+        onload: function(){
+
+        },
+        setSrc: function(src){
+            this.src = src;
+            this.image.src = src;
+        },
+        src: ""
+    });
+
+        canvas.addEventListener("wheel",eventPasser);
     var lastx, lasty;
 /*    canvas.addEventListener("mousemove",function(e){
         var x = e.clientX;
@@ -385,6 +426,7 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
         lasty = y;
     });*/
     var lastx, lasty, target;
+    canvas.addEventListener("click",eventPasser);
     canvas.addEventListener("mousedown",function(e){
         var x = e.clientX;
         var y = e.clientY;
@@ -405,6 +447,12 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             lasty = e.clientY;
             target.mousedrag(e);
         }
+        else{
+            canvas.cursor = "normal";
+            if (root.hitTest(e.clientX, e.clientY, "click")){
+                canvas.cursor = "pointer";
+            }
+        }
     });
     canvas.addEventListener("mouseup",dragdone);
     canvas.addEventListener("mouseout",dragdone);
@@ -422,56 +470,3 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             hit[e.type](e);
     }
 })();
-root = new View();
-root.addSubview(new ResizingView({
-    backgroundColor:false,
-    metrics:{
-        x: -25,
-        y: 100,
-        width: 0,
-        height: 0,
-        scalar: {
-            x:.5
-        }
-    }
-}));
-var tv = new TextView({
-    color:"blue",
-    text:"This thing will wrap a lot",
-    metrics:{
-        width: 50,
-        height: 50
-    }
-});
-root.subviews[0].addSubview(tv);
-var sv = new ScrollView({
-    metrics:{
-        x:100,y:20,width:50,height:50
-    }
-});
-root.addSubview(sv);
-var li = new ListView({
-    metrics: {
-        x: 0,
-        y: 0,
-        width: 50
-    }
-});
-sv.addSubview(li);
-li.addSubview(new TextView({
-    metrics:{
-        scalar:{
-            width:1
-        }
-    },
-    text:"woo lol ollolool adsf"
-}));
-li.addSubview(new TextView({
-    metrics:{
-        scalar:{
-            width:1
-        }
-    },
-    text:"hi hi hi hhi "
-}));
-
