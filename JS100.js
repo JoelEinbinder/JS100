@@ -1,4 +1,4 @@
-var root, View, TextView, ResizingView;
+var root, View, TextView, ResizingView, ListView, ScrollView;
 (function() {
     document.addEventListener("DOMContentLoaded", init);
     var canvas = document.createElement("canvas");
@@ -93,6 +93,9 @@ var root, View, TextView, ResizingView;
                 }
             return canvas;
         },
+        getCenter:function(){
+            return {x:this.frame.x + this.frame.width/2, y: this.frame.y + this.frame.height/2 };
+        },
         computeFrame: function(){
             if (this.superview){
                 if (this.metrics) {
@@ -158,6 +161,20 @@ var root, View, TextView, ResizingView;
                 v.refreshFrame();
                 return true;
             }
+            return false;
+        },
+        hitTest: function(x,y,event){
+            if (x > this.frame.x && x < this.frame.x + this.frame.width)
+                if (y > this.frame.y && y < this.frame.y + this.frame.height){
+                    if (this.subviews)
+                        for (var i = 0; i < this.subviews.length; i++){
+                            var hit = this.subviews[i].hitTest(x-this.frame.x,y-this.frame.y,event);
+                            if (hit)
+                                return hit;
+                        }
+                    if (!event || this[event])
+                        return this;
+                }
             return false;
         },
         backgroundColor:false,
@@ -311,9 +328,102 @@ var root, View, TextView, ResizingView;
         },
         horizontal: false
     });
+    ScrollView = function(e){
+        View.apply(this,[e]);
+    };
+    ScrollView.prototype = merge(View.prototype, {
+        scrollx: 0,
+        scrolly: 0,
+        paint: function () {
+            var canvas = this.getCanvas();
+            var ctx = canvas.getContext('2d');
+            if (this.subviews){
+                for (var i = 0; i < this.subviews.length; i++) {
+                    var v = this.subviews[i];
+                    ctx.drawImage(v.paint(), v.frame.x - this.scrollx, v.frame.y - this.scrolly);
+                }
+            }
+            return canvas;
+        },
+        wheel: function(e){
+            this.scroll(e.deltaX, e.deltaY);
+        },
+        scroll: function(dx,dy){
+            this.scrollx += dx;
+            this.scrolly += dy;
+            this.scrollx = Math.max(this.scrollx,0);
+            this.scrolly = Math.max(this.scrolly,0);
+            var innerWidth = 0;
+            var innerHeight = 0;
+            for (var i = 0; i < this.subviews.length; i++){
+                innerWidth = Math.max(innerWidth,this.subviews[i].frame.x + this.subviews[i].frame.width);
+                innerHeight = Math.max(innerHeight,this.subviews[i].frame.y + this.subviews[i].frame.height);
+            }
+            this.scrollx = Math.min(this.scrollx,innerWidth - this.frame.width);
+            this.scrolly = Math.min(this.scrolly,innerHeight - this.frame.height);
+
+        },
+        mousedrag: function(e){
+            if (e.which != 0){
+                this.scroll(-e.movementX, -e.movementY);
+            }
+        }
+    });
+    canvas.addEventListener("wheel",eventPasser);
+    var lastx, lasty;
+/*    canvas.addEventListener("mousemove",function(e){
+        var x = e.clientX;
+        var y = e.clientY;
+
+        var hit = false;
+        if (root)
+            hit = root.hitTest(x,y, "mousedrag");
+
+        if (hit)
+            hit["mousedrag"](e);
+        lastx = x;
+        lasty = y;
+    });*/
+    var lastx, lasty, target;
+    canvas.addEventListener("mousedown",function(e){
+        var x = e.clientX;
+        var y = e.clientY;
+        lastx = x;
+        lasty = y;
+        var hit = false;
+        if (root)
+            hit = root.hitTest(x,y, "mousedrag");
+
+        target = hit;
+    });
+
+    canvas.addEventListener("mousemove",function(e){
+        if (target) {
+            e.movementX = e.clientX - lastx;
+            e.movementY = e.clientY - lasty;
+            lastx = e.clientX;
+            lasty = e.clientY;
+            target.mousedrag(e);
+        }
+    });
+    canvas.addEventListener("mouseup",dragdone);
+    canvas.addEventListener("mouseout",dragdone);
+    function dragdone(){
+        target = false;
+    }
+    function eventPasser(e){
+        var x = e.clientX;
+        var y = e.clientY;
+        var hit = false;
+        if (root)
+            hit = root.hitTest(x,y, e.type);
+
+        if (hit)
+            hit[e.type](e);
+    }
 })();
 root = new View();
-/*root.addSubview(new ResizingView({
+root.addSubview(new ResizingView({
     backgroundColor:false,
     metrics:{
         x: -25,
@@ -334,14 +444,20 @@ var tv = new TextView({
     }
 });
 root.subviews[0].addSubview(tv);
+var sv = new ScrollView({
+    metrics:{
+        x:100,y:20,width:50,height:50
+    }
+});
+root.addSubview(sv);
 var li = new ListView({
     metrics: {
-        x: 100,
-        y: 20,
+        x: 0,
+        y: 0,
         width: 50
     }
 });
-root.addSubview(li);
+sv.addSubview(li);
 li.addSubview(new TextView({
     metrics:{
         scalar:{
@@ -358,4 +474,4 @@ li.addSubview(new TextView({
     },
     text:"hi hi hi hhi "
 }));
-*/
+
