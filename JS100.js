@@ -311,19 +311,22 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
         View.apply(this,[e]);
     };
     ListView.prototype = merge(View.prototype,{
+        resizesToContent:false,
         computeFrame:function(){
             View.prototype.computeFrame.apply(this);
-            if (this.horizontal) {
-                this.frame.width = 0;
-                if (this.subviews)
-                    for (var i = 0; i < this.subviews.length; i++)
-                        this.frame.width += this.subviews[i].frame.width;
-            }
-            else {
-                this.frame.height = 0;
-                if (this.subviews)
-                    for (var i = 0; i < this.subviews.length; i++)
-                        this.frame.height += this.subviews[i].frame.height;
+            if (this.resizesToContent) {
+                if (this.horizontal) {
+                    this.frame.width = 0;
+                    if (this.subviews)
+                        for (var i = 0; i < this.subviews.length; i++)
+                            this.frame.width += this.subviews[i].frame.width;
+                }
+                else {
+                    this.frame.height = 0;
+                    if (this.subviews)
+                        for (var i = 0; i < this.subviews.length; i++)
+                            this.frame.height += this.subviews[i].frame.height;
+                }
             }
         },
         paint: function(){
