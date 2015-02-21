@@ -2,6 +2,7 @@
  * Created by joel on 2/21/15.
  */
 root = new View();
+
 root.addSubview(new ResizingView({
     backgroundColor:false,
     metrics:{
@@ -14,6 +15,16 @@ root.addSubview(new ResizingView({
         }
     }
 }));
+root.addSubview(new View({
+    metrics:{
+        x: 10,
+        y: 20,
+        width: 100,
+        height: 100
+    },
+    backgroundColor:"red"
+}));
+
 var tv = new TextView({
     color:"blue",
     text:"This thing will wrap a lot",
@@ -22,7 +33,7 @@ var tv = new TextView({
         height: 50
     }
 });
-root.subviews[0].addSubview(tv);
+
 var sv = new ScrollView({
     metrics:{
         x:100,y:20,width:50,height:50
@@ -34,7 +45,8 @@ var li = new ListView({
         x: 0,
         y: 0,
         width: 50
-    }
+    },
+    resizesToContent:true
 });
 sv.addSubview(li);
 li.addSubview(new TextView({
