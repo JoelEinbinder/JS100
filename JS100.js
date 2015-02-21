@@ -435,7 +435,10 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             height: 50
         };
         this.image = new Image();
-        this.image.onload = this.onload;
+        var me = this;
+        this.image.onload = function(){
+            me.setDirty();
+        };
         for (var i in e){
             this[i] = e[i];
         }
@@ -448,9 +451,6 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             if (this.image)
                 canvas.getContext('2d').drawImage(this.image,0,0,canvas.width,canvas.height);
             return canvas;
-        },
-        onload: function(){
-            this.setDirty();
         },
         setSrc: function(src){
             this.src = src;
