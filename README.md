@@ -4,14 +4,14 @@
 * ~~frame~~
 * ~~computeFrame~~
 * ~~superview~~
-* setFrame
-* %w %h x y
+* ~~setFrame~~
+* ~~%w %h x y~~
 * ~~subviews~~
 * depth
 * ImageView
-* TextView
+* ~~TextView~~
 * ScrollView
-* ResizingView
+* ~~ResizingView~~
 * ListView
 * hitTest
 * ~~GameLoop~~
