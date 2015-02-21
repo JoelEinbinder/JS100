@@ -55,17 +55,44 @@
         },
     })
 
-    contentList.addSubview(new TextView({
+    var friendRequestTitle = new View({
         metrics: {
-            x: 10,
+            x: 0,
             y: 0,
             height: 45,
             scalar: {
-                width: 1
+                width:1
+            }
+        }
+    })
+
+    friendRequestTitle.addSubview(new TextView({
+        metrics: {
+            x: 10,
+            y: 15,
+            scalar: {
+                height: 1,
+                width: 0.5
             }
         },
         text: "Friend Requests"
     }))
+
+    friendRequestTitle.addSubview(new ImageView({
+        metrics: {
+            x:-20,
+            y: 15,
+            height:15,
+            width:15,
+
+            scalar: {
+                x:1
+            }
+        },
+        src: "http://www.polyvore.com/cgi/img-thing?.out=jpg&size=l&tid=33839070"
+    }))
+
+    contentList.addSubview(friendRequestTitle);
 
     var friendrequests = getFriendRequests();
 
@@ -73,7 +100,72 @@
         contentList.addSubview(friendrequests[i]);
     }
 
+    knowPeople = new View({
+        backgroundColor: "#f7f7f7",
+        metrics: {
+            x: 0,
+            y: 0,
+            height: 30,
+            scalar: {
+                width: 1
+            }
+        },
+        strokeColor: "gray"
+    });
+
+    knowPeople.addSubview(new TextView({
+        metrics: {
+            x: 5,
+            y: 9,
+            scalar: {
+                height: 1,
+                width: 1
+            }
+        },
+        text: "PEOPLE YOU MAY KNOW",
+        fontSize: 12
+    }))
+
+    contentList.addSubview(knowPeople);
+
+    var knowpeople = getKnowPeople();
+
+    for (var i = 0; i < knowpeople.length; i++) {
+        contentList.addSubview(knowpeople[i]);
+    }
+
+    var seeAll = new View({
+        metrics: {
+            x: 0,
+            y: 0,
+            height: 50,
+            scalar: {
+                width:1
+            }
+        },
+        strokeColor: "white"
+    })
+
+    seeAll.addSubview(new TextView({
+        metrics: {
+            x: 10,
+            y: 10,
+            height: 20,
+            scalar: {
+                width:1
+            }
+        },
+        text: "See All",
+        fontSize:12,
+        color:"#3b5998"
+    }))
+
+    contentList.addSubview(seeAll);
+
     content.addSubview(contentList);
+
+
+
 
     function getFriendRequests() {
         var data = getFriendRequestData().data;
@@ -187,13 +279,103 @@
         return friendRequests;
     }
 
+    function getKnowPeople() {
+        var data = getKnowPeopleData().data;
+
+        var knowPeople = [];
+        for (var i = 0; i < data.length; i++) {
+            var knowperson = data[i];
+
+            var knowPeopleRow = new View({
+                metrics: {
+                    x: 0,
+                    y: 0,
+                    height: 50,
+                    scalar: {
+                        width: 1
+                    }
+                },
+                strokeColor: "gray"
+            })
+
+            knowPeopleRow.addSubview(new ImageView({
+                metrics: {
+                    x: 10,
+                    y: 5,
+                    width: 40,
+                    height: 40
+                },
+                src: knowperson.img
+            }));
+
+            knowPeopleRow.addSubview(new TextView({
+                metrics: {
+                    x: 60,
+                    y: 10,
+                    height: 30,
+                    scalar: {
+                        width: 1
+                    }
+                },
+                text: knowperson.name
+            }));
+
+            knowPeopleRow.addSubview(new TextView({
+                metrics: {
+                    x: 60,
+                    y: 30,
+                    height: 20,
+                    scalar: {
+                        width: 1
+                    }
+                },
+                text: knowperson.numMutFriends + " mutual friends",
+                fontSize: 12,
+                color:"gray"
+            }));
+
+            var addFriend = new View({
+                backgroundColor: "#3b5998",
+                metrics: {
+                    x:-85,
+                    y: 15,
+                    height: 25,
+                    width: 75,
+                    scalar: {
+                        x:1
+                    }
+                }
+            });
+
+            addFriend.addSubview(new TextView({
+                metrics: {
+                    x: 0,
+                    y: 7.5,
+                    scalar: {
+                        width: 1,
+                        height: 1
+                    }
+                },
+                justify: "center",
+                text: "Add Friend",
+                color: "white",
+                fontSize:12
+            }));
+
+            knowPeopleRow.addSubview(addFriend);
+
+            knowPeople.push(knowPeopleRow);
+        }
+        return knowPeople;
+    }
+
     function getFriendRequestData() {
         return {
             data: [
                 {
-                    "img": "http://upload.wikimedia.org/wikipedia/en/2/28/Deep_Fried_Man_portrait_-_real_name_Daniel_Friedman_-_South_African_Comedian.jpg",
-                    "name": "John Jay",
-                    "friend": "Joel Einbinder",
+                    "img": "http://img1.wikia.nocookie.net/__cb20141108074537/powerlisting/images/5/5e/Amy-the-secret-life-of-the-american-teenager-19852399-500-375.jpg",
+                    "name": "Jane Doe",
+                    "friend": "Vincent Chen",
                     "viewed": false
                 },
                 {
@@ -201,6 +383,23 @@
                     "name": "John Jay",
                     "friend": "Joel Einbinder",
                     "viewed": true
+                }
+            ]
+        }
+    }
+
+    function getKnowPeopleData() {
+        return {
+            data: [
+                {
+                    "img": "http://connectedwomanmag.com/wp-content/uploads/2015/01/black-woman-thinking.jpg",
+                    "name": "Mary Hansen",
+                    "numMutFriends": 14
+                },
+                {
+                    "img": "http://www.menshairstyles.net/d/76238-1/Young+Asian+man+hairstyles.PNG",
+                    "name": "Joe Schmoe",
+                    "numMutFriends": 52
                 }
             ]
         }
