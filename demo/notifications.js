@@ -89,7 +89,7 @@
                 metrics: {
                     x: 0,
                     y: 0,
-                    height: 100,
+                    height: 53,
                     scalar: {
                         width: 1
                     }
@@ -98,15 +98,15 @@
 
             var profilePic = new ImageView({
                 metrics: {
-                    x: 10, y: 10, 
-                    width: 80, height: 80
+                    x: 6, y: 6, 
+                    width: 40, height: 40
                 },
                 src: notification.img
             });
 
             var notificationDesc = new TextView({
                 metrics: {
-                    x: 100, y: 13,
+                    x: 55, y: 13,
                     scalar: {
                         height: 1,
                         width: 1
@@ -117,10 +117,10 @@
             });
             var timeDesc = new TextView({
                 metrics: {
-                    x: 120, y: 77,
+                    x: 75, y: -17,
                     scalar: {
                         width: 1,
-                        height: 1
+                        y: 1
                     }
                 },
                 text: getTimeSince(notification.when),
@@ -141,8 +141,11 @@
 
             var iconImg = new ImageView({
                 metrics: {
-                    x: 100, y: 73,
-                    width: 17, height: 17
+                    x: 53, y: -21,
+                    width: 17, height: 17,
+                    scalar: {
+                        y: 1
+                    }
                 },
                 src: notification.iconImg
             });
