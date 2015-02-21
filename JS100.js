@@ -51,6 +51,12 @@ var root, View, TextView, ResizingView;
 
 
     View = function(e){
+        this.metrics = {
+            x: 0,
+            y: 0,
+            width: 50,
+            height: 50
+        };
         this.frame = {
             x: 0,
             y: 0,
@@ -141,10 +147,15 @@ var root, View, TextView, ResizingView;
             this.bubbleFrame(true);
             this.bubbleFrame(false);
         },
+        setMetrics: function(m){
+            this.metrics = m;
+            this.refreshFrame();
+        },
         addSubview: function(v){
             if (this.subviews) {
                 this.subviews.push(v);
                 v.superview = this;
+                v.refreshFrame();
                 return true;
             }
             return false;
@@ -153,6 +164,12 @@ var root, View, TextView, ResizingView;
         strokeColor:"black"
     };
     TextView = function(e){
+        this.metrics = {
+            x: 0,
+            y: 0,
+            width: 50,
+            height: 50
+        };
         this.frame = {
             x: 0,
             y: 0,
@@ -188,6 +205,14 @@ var root, View, TextView, ResizingView;
         },
         setText: function(text){
             this.text = text;
+            this.refreshFrame();
+        },
+        setFont: function(font){
+            this.font = font;
+            this.refreshFrame();
+        },
+        setFontSize: function(fontSize){
+            this.fontSize = fontSize;
             this.refreshFrame();
         },
         computeFrame:function(){
@@ -247,31 +272,90 @@ var root, View, TextView, ResizingView;
         fixedHorizontal: false,
         fixedVertical: false
     });
+
+    ListView = function(e){
+        View.apply(this,[e]);
+    };
+    ListView.prototype = merge(View.prototype,{
+        computeFrame:function(){
+            View.prototype.computeFrame.apply(this);
+            if (this.horizontal) {
+                this.frame.width = 0;
+                if (this.subviews)
+                    for (var i = 0; i < this.subviews.length; i++)
+                        this.frame.width += this.subviews[i].frame.width;
+            }
+            else {
+                this.frame.height = 0;
+                if (this.subviews)
+                    for (var i = 0; i < this.subviews.length; i++)
+                        this.frame.height += this.subviews[i].frame.height;
+            }
+        },
+        paint: function(){
+            var canvas = this.getCanvas();
+
+            var ctx = canvas.getContext('2d');
+            var xx = 0;
+            var yy = 0;
+            if (this.subviews)
+                for (var i = 0; i < this.subviews.length; i++){
+                    ctx.drawImage(this.subviews[i].paint(),xx,yy);
+                    if (this.horizontal)
+                        xx += this.subviews[i].frame.width;
+                    else
+                        yy += this.subviews[i].frame.height;
+
+                }
+            return canvas;
+        },
+        horizontal: false
+    });
 })();
 root = new View();
-root.addSubview(new ResizingView({
+/*root.addSubview(new ResizingView({
     backgroundColor:false,
     metrics:{
         x: -25,
         y: 100,
-        width: 100,
-        height: 65,
+        width: 0,
+        height: 0,
         scalar: {
             x:.5
         }
     }
 }));
-root.subviews[0].addSubview(new TextView({
+var tv = new TextView({
     color:"blue",
     text:"This thing will wrap a lot",
     metrics:{
-        scalar:{
-            width:1,
-            height:1
-        }
+        width: 50,
+        height: 50
     }
+});
+root.subviews[0].addSubview(tv);
+var li = new ListView({
+    metrics: {
+        x: 100,
+        y: 20,
+        width: 50
+    }
+});
+root.addSubview(li);
+li.addSubview(new TextView({
+    metrics:{
+        scalar:{
+            width:1
+        }
+    },
+    text:"woo lol ollolool adsf"
 }));
-
-
-
-
+li.addSubview(new TextView({
+    metrics:{
+        scalar:{
+            width:1
+        }
+    },
+    text:"hi hi hi hhi "
+}));
+*/
