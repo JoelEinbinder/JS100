@@ -1,0 +1,99 @@
+//Post templates from https://developers.facebook.com/docs/graph-api/reference/v2.0/post
+
+//Link from user
+{
+	"id":"123059102591asdf",
+	"from": {//User's Profile object as value type
+		"id":"39582935blah",
+		//... many fields left out
+		"first_name":"John",
+		"middle_name": "WeirdMiddleName",
+		"last_name":"Smith",
+		"link":"https://www.facebook.com/fakeURL",
+		"name": "John WeirdMiddleName Smith",
+		"timezone": -8, //PST
+	}, 
+	"caption":"This is the Treehacks homepage!",
+	"link":"https://www.treehacks.com/",
+	"message":"So sleep deprived ugh.",
+	"name":"Treehacks | Winter 2015",
+	"picture":"https://www.treehacks.com/images/pulse.png",
+	"privacy":{
+		"description":"Public",
+		"value":"EVERYONE", //enum
+	},
+	"to": {
+		//Target user
+	},
+	"updated_time":"2010-08-02T21:27:44+0000",
+	"with_tags":[
+		{/*Profile-1*/}, {/*Profile-2*/}
+	],
+	"type":"link"
+
+	
+
+
+
+}
+
+//Sample status messages, borrowed from http://www.sitepoint.com/facebook-json-example/
+[
+{  
+    "id":"X999_Y999",
+    "from":{  
+        "name":"Tom Brady",
+        "id":"X12"
+    },
+    "message":"Looking forward to 2015!",
+    "actions":[  
+        {  
+            "name":"Comment",
+            "link":"http://www.facebook.com/X999/posts/Y999"
+        },
+        {  
+            "name":"Like",
+            "link":"http://www.facebook.com/X999/posts/Y999"
+        }
+    ],
+    "type":"status",
+	"status_type":"wall_post",
+    "privacy":{
+		"description":"Public",
+		"value":"FRIENDS_OF_FRIENDS", //enum
+	},
+    "created_time":"2010-08-02T21:27:44+0000",
+    "updated_time":"2010-08-02T21:27:44+0000"
+
+},
+{  
+    "id":"X998_Y998",
+    "from":{  
+        "name":"Peyton Manning",
+        "id":"X18"
+    },
+    "to":{  
+        "name":"John Fox",
+        "id":"X19"
+    },
+    "message":"Where's my contract?",
+    "actions":[  
+        {  
+            "name":"Comment",
+            "link":"http://www.facebook.com/X998/posts/Y998"
+        },
+        {  
+            "name":"Like",
+            "link":"http://www.facebook.com/X998/posts/Y998"
+        }
+    ],
+    "privacy":{
+		"description":"Public",
+		"value":"EVERYONE", //enum
+	},
+    "type":"status",
+	"status_type":"wall_post",
+    "created_time":"2010-08-02T21:27:44+0000",
+    "updated_time":"2010-08-02T21:27:44+0000"
+}
+]
