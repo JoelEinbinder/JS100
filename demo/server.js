@@ -20,11 +20,12 @@ app.all('*', function(req, res, next) {
 
 /** GET **/
 app.get('/', function(req, res) {
-    res.send('dummyPage.html');
+    res.render('dummyPage.html');
 });
-app.get('/profile', function(req, res) {
-    res.send("profile.html");
-});
+
+/****** Settings  ******/
+app.set('views', './');
+app.engine('html', require('ejs').renderFile);
 
 /*** Server ***/
 var server = app.listen(3000, function() {
