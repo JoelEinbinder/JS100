@@ -58,7 +58,7 @@ function drawTitle(text){
 		scalar:{
 			width: 1,
 		}
-	})
+	});
 	root.addSubview(titleWrapper);
 	
 	//Add menu title
@@ -110,7 +110,7 @@ function drawNavBar(activeMenu){
 		scalar:{
 			width: 1,
 		}
-	})
+	});
 	root.addSubview(navBarWrapper);
 
 	for(var i = 0; i < 5; i++){
@@ -118,7 +118,8 @@ function drawNavBar(activeMenu){
 		navBarWrapper.addSubview(currNavItem);
 		if(pushNum[i] != 0){ //TODO: Figure out how to retrieve this data
 			//Need to display push notifications for this
-			drawPushBubble(pushNum);
+			var currBubble = drawPushBubble(pushNum);
+			currNavItem.addSubview(currBubble);
 		}
 	}
 }
@@ -127,7 +128,6 @@ function drawNavBar(activeMenu){
 * Draws a single nav bar item
 * @index: this item is the index-th nav bar item. Used for positioning
 * @activeStatus: determines if this nav bar item is currently active
-* @pushNum: number of push notifications to display in alert
 */
 function drawNavItem(index, activeStatus, imagepathname){
 
@@ -144,6 +144,33 @@ function drawNavItem(index, activeStatus, imagepathname){
 	});
 
 	return navItem;
+}
+
+/**
+*	Draws the number of push notifications
+*	@pushNum: number to display inside red alert circle
+*/
+function drawPushBubble(pushNum){
+	//TODO: Verify that this sequential ordering of adding views is consistent with
+	//		desired ordering
+
+	var redCircle = new ImageView({
+		metrics:{
+			width: 10,
+			height: 10
+		},
+		imagepath: "http://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Disc_Plain_red.svg/2000px-Disc_Plain_red.svg.png"
+	});
+
+	redCircle.addSubview(new TextView({
+		metrics:{
+			color:white,
+			height:5
+		},
+		text:pushNum
+	}));
+
+	return redCircle;
 }
 
 /*
