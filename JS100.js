@@ -69,13 +69,21 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
         }
     };
     View.prototype = {
+        dirty: true,
+        firstFrame: true,
         getCanvas: function(){
             var canvas = document.createElement("canvas");
             canvas.width = this.frame.width;
             canvas.height = this.frame.height;
             return canvas;
         },
-        paint:function() {
+        setDirty:function(){
+            this.dirty = true;
+            this.cache = null;
+            if (this.superview)
+                this.superview.setDirty()
+        },
+        render:function(){
             var canvas = this.getCanvas();
             var ctx = canvas.getContext('2d');
             if (this.backgroundColor) {
@@ -91,6 +99,14 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
                     var v = this.subviews[i];
                     ctx.drawImage(v.paint(), v.frame.x, v.frame.y);
                 }
+            return canvas;
+        },
+        paint:function() {
+            if (!this.dirty)
+                return this.cache;
+            var canvas = this.render();
+            this.dirty = false;
+            this.cache = canvas;
             return canvas;
         },
         getCenter:function(){
@@ -127,24 +143,39 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
                 this.frame = wholeFrame();
             }
         },
+        checkFrame: function(){
+            if (this.firstFrame){
+                this.setDirty();
+                this.firstFrame = false;
+                return true;
+            }
+
+            var oldframe = this.frame;
+            this.computeFrame();
+            if (this.frame.x == oldframe.x && this.frame.y == oldframe.y && this.frame.width == oldframe.width && this.frame.height == oldframe.height){
+                return false;
+            }
+            this.setDirty();
+            return true;
+        },
         bubbleFrame: function(up){
             if (up){
                 if (this.superview) {
-                    this.superview.computeFrame();
-                    this.superview.bubbleFrame(up);
+                    if (this.superview.checkFrame())
+                        this.superview.bubbleFrame(up);
                 }
             }
             else {
                 if (this.subviews)
                     for (var i = 0; i < this.subviews.length; i++) {
-                        this.subviews[i].computeFrame();
-                        this.subviews[i].bubbleFrame(up);
+                        if (this.subviews[i].checkFrame())
+                            this.subviews[i].bubbleFrame(up);
                     }
             }
         },
         refreshFrame: function(){
-            this.computeFrame();
-            this.updatedFrame();
+            if (this.checkFrame())
+                this.updatedFrame();
         },
         updatedFrame: function(){
             this.bubbleFrame(true);
@@ -177,7 +208,7 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
                 }
             return false;
         },
-        backgroundColor:false,
+        backgroundColor:null,
         strokeColor:"black"
     };
     TextView = function(e){
@@ -207,12 +238,13 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
         fontSize: 15,
         justify:"left",
         font: "Verdana, Geneva, sans-serif",
-        paint: function(){
+        decoration: "",
+        render: function(){
             var canvas = this.getCanvas();
             var ctx = canvas.getContext('2d');
             //build up lines
             var text = this.text;
-            ctx.font = this.fontSize + "px " + this.font;
+            ctx.font = this.decoration + " " + this.fontSize + "px " + this.font;
             ctx.fillStyle = this.color;
             ctx.textBaseline = "hanging";
             var lines = this.generateLines();
@@ -329,7 +361,7 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
                 }
             }
         },
-        paint: function(){
+        render: function(){
             var canvas = this.getCanvas();
 
             var ctx = canvas.getContext('2d');
@@ -354,7 +386,7 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
     ScrollView.prototype = merge(View.prototype, {
         scrollx: 0,
         scrolly: 0,
-        paint: function () {
+        render: function () {
             var canvas = this.getCanvas();
             var ctx = canvas.getContext('2d');
             if (this.subviews){
@@ -381,7 +413,7 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             }
             this.scrollx = Math.min(this.scrollx,innerWidth - this.frame.width);
             this.scrolly = Math.min(this.scrolly,innerHeight - this.frame.height);
-
+            this.setDirty();
         },
         mousedrag: function(e){
             if (e.which != 0){
@@ -403,7 +435,10 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             height: 50
         };
         this.image = new Image();
-        this.image.onload = this.onload();
+        var me = this;
+        this.image.onload = function(){
+            me.setDirty();
+        };
         for (var i in e){
             this[i] = e[i];
         }
@@ -411,14 +446,11 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             this.image.src = this.src;
     };
     ImageView.prototype = merge(View.prototype, {
-        paint: function(){
+        render: function(){
             var canvas = this.getCanvas();
             if (this.image)
                 canvas.getContext('2d').drawImage(this.image,0,0,canvas.width,canvas.height);
             return canvas;
-        },
-        onload: function(){
-
         },
         setSrc: function(src){
             this.src = src;

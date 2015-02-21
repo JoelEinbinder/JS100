@@ -1,8 +1,7 @@
 (function() {
     root = new View()
 
-    /* Parent listview = perfect for webpages */
-    contentLV = new ListView({
+    contentList = new ListView({
         metrics: {
             x: 0,
             y: 0,
@@ -12,29 +11,43 @@
             }
         }
     });
+    root.addSubview(contentList);
 
-    /* Title bar */
-    titleBar = getTitleBar();
-    root.addSubview( titleBar );
+    var navBar = getNavBar();
+    contentList.addSubview(navBar)
 
-    /* Notifications bar */
-    notifications = getNotifications();
-    contentLV.addSubview( titleBar )
+    var titleBar = getTitleBar();
+    contentList.addSubview(titleBar);
+
+    var notifications = getNotifications();
     for (var i = 0; i < notifications.length; i++) {
-        contentLV.addSubview( notifications[i] );
+        contentList.addSubview( notifications[i] );
     }
 
-    /** Add LV **/
-    root.addSubview(contentLV);
 
     /*****************************
      *         Helpers           *
      *****************************/
-    function getTitleBar() {
+    function getNavBar() {
         var fbBlue = "#3B5998"
 
+        var navBar = new View({
+            metrics: {
+                x: 0,
+                y: 0,
+                scalar: {
+                    width: 1,
+                    height: 0.08
+                }
+            },
+            backgroundColor: fbBlue
+        });
+
+        return navBar;
+    }
+    function getTitleBar() {
         var titleWrapper = new View({
-            backgroundColor: fbBlue,
+            backgroundColor: 'white',
             metrics: {
                 x: 0,
                 y: 0,
@@ -46,10 +59,11 @@
         });
 
         titleWrapper.addSubview(new TextView({
-            color: "white",
-            fontSize: 22,
+            color: "black",
+            fontSize: 16,
+            decoration: "bold",
             metrics: {
-                x: 650,
+                x: 10,
                 y: 20,
                 scalar: {
                     width: 1,
@@ -69,31 +83,78 @@
         for (var i = 0; i < data.length; i++) {
             var notification = data[i];
 
-            var rowView = new View({
-                backgroundColor: (notification.viewed) ? "white" : "grey",
+            var notificationRow = new View({
+                backgroundColor: (notification.viewed) ? "white" : "#dfe3ee",
+                strokeColor: "gray",
                 metrics: {
                     x: 0,
                     y: 0,
+                    height: 53,
                     scalar: {
-                        width: 1,
-                        height: 0.1
+                        width: 1
                     }
                 }
             });
 
             var profilePic = new ImageView({
-                x: 0, y: 0,
+                metrics: {
+                    x: 6, y: 6, 
+                    width: 40, height: 40
+                },
                 src: notification.img
             });
 
-            var notificationText = new TextView({
-                x: 0, y: 0,
-                text: notification.desc
+            var notificationDesc = new TextView({
+                metrics: {
+                    x: 55, y: 13,
+                    scalar: {
+                        height: 1,
+                        width: 1
+                    }
+                },
+                text: notification.desc,
+                fontSize: 12
+            });
+            var timeDesc = new TextView({
+                metrics: {
+                    x: 75, y: -17,
+                    scalar: {
+                        width: 1,
+                        y: 1
+                    }
+                },
+                text: getTimeSince(notification.when),
+                fontSize: 12
             });
 
-            rowView.addSubview(profilePic);
-            rowView.addSubview(notificationText);
-            notifications.push( rowView );
+            var textWrapper = new View({
+                metrics: {
+                    x: 0, y: 0,
+                    scalar: {
+                        height: 1,
+                        width: 1
+                    }
+                }
+            });
+            textWrapper.addSubview(notificationDesc);
+            textWrapper.addSubview(timeDesc);
+
+            var iconImg = new ImageView({
+                metrics: {
+                    x: 53, y: -21,
+                    width: 17, height: 17,
+                    scalar: {
+                        y: 1
+                    }
+                },
+                src: notification.iconImg
+            });
+
+            notificationRow.addSubview(profilePic);
+            notificationRow.addSubview(textWrapper);
+            notificationRow.addSubview(iconImg);
+
+            notifications.push(notificationRow);
         }
 
         return notifications;
@@ -103,20 +164,26 @@
         return {
             data: [
                 {
-                "img": "lincoln.jpg",
-                "desc": "Abe Lincoln accepted your friend request. Write on Austin's timeline.",
-                "iconDesc": "friendRequest",
-                "when": "new Date().getTime()",
+                "img": "imgs/lincoln.jpg",
+                "desc": "Abe Lincoln accepted your friend request. You can now see his latest photos and posts on his profile.",
+                "iconImg": "imgs/content.png",
+                "when": new Date().getTime() - Math.floor(100000*Math.random()),
                 "viewed": false
                 },
                 {
-                "img": "lincoln.jpg",
+                "img": "imgs/lincoln.jpg",
                 "desc": "Miley Cyrus added a new video.",
-                "iconDesc": "content",
-                "when": "new Date().getTime()",
+                "iconImg": "imgs/content.png",
+                "when": new Date().getTime() - Math.floor(100000*Math.random()),
                 "viewed": true
                 }
             ]
         }
+    }
+
+    function getTimeSince( date ) {
+        // TODO: Do better...
+        var dateTokens = new Date( date ).toString().split(" ");
+        return dateTokens[1] + " " + dateTokens[2] + " at " + dateTokens[4]
     }
 })();
