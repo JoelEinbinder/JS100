@@ -1,6 +1,7 @@
 * Purge
 * depth
 * setDirty
+* ~~Animations~~
 * ~~NonResizing list~~
 * ~~Text Justify~~
 * ~~View~~
