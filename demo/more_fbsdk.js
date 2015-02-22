@@ -87,7 +87,7 @@ function initPage(){
 
         var apps = getPanels(panelData.data[3])
         //var friends = getPanels(panelData.data[4])
-        getEndpointWrapper("/me/friendlists", "FRIENDS", 2);
+        //getEndpointWrapper("/me/friendlists", "FRIENDS", 2);
         //var interests = getPanels(panelData.data[5])
         getEndpointWrapper("/me/interests", "INTERESTS", 3);
         //var pages = getPanels(panelData.data[6])
@@ -357,7 +357,7 @@ function initPage(){
 
             console.log(data);
 
-            if(data.data.length == 0){
+            if(data.data == 'undefined' || data.data.length == 0){
                 //None to draw!
                 content.log("No content to populate with!");
                 var panelRow = new View({
@@ -399,8 +399,6 @@ function initPage(){
                 contentList.addSubview(panelRow);
                 return;
             }
-
-            console.log(data.data.length);
 
             var length = ((data.data.length > numToShow) ? numToShow : data.data.length); //Cap section at length = 5
             //length = 1;
