@@ -6,13 +6,23 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
     canvas.style.top = "0";
     canvas.style.left = "0";
     window.onresize = resize;
+    var setup = false;
     function resize(){
+        setup = true;
         canvas.setAttribute("width",window.innerWidth);
         canvas.setAttribute("height",window.innerHeight);
         root.refreshFrame();
         paint(0, true)
     }
     function wholeFrame(){
+        if (!setup){
+            return {
+                x: 0,
+                y: 0,
+                width: 0,
+                height: 0
+            }
+        }
         return {
             x: 0,
             y: 0,
@@ -113,30 +123,35 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             return {x:this.frame.x + this.frame.width/2, y: this.frame.y + this.frame.height/2 };
         },
         computeFrame: function(){
+
             if (this.superview){
-                if (this.metrics) {
-                    var frame = {
-                        x: this.metrics.x,
-                        y: this.metrics.y,
-                        width: this.metrics.width,
-                        height: this.metrics.height
-                    };
-                    for (var i in frame){
-                        if (!frame[i]){
-                            frame[i] = 0;
+                if (this.superview.layoutSubview)
+                    this.superview.layoutSubview(this);
+                else {
+                    if (this.metrics) {
+                        var frame = {
+                            x: this.metrics.x,
+                            y: this.metrics.y,
+                            width: this.metrics.width,
+                            height: this.metrics.height
+                        };
+                        for (var i in frame) {
+                            if (!frame[i]) {
+                                frame[i] = 0;
+                            }
                         }
+                        if (this.metrics.scalar) {
+                            if (this.metrics.scalar.x)
+                                frame.x += this.superview.frame.width * this.metrics.scalar.x;
+                            if (this.metrics.scalar.y)
+                                frame.y += this.superview.frame.height * this.metrics.scalar.y;
+                            if (this.metrics.scalar.width)
+                                frame.width += this.superview.frame.width * this.metrics.scalar.width;
+                            if (this.metrics.scalar.height)
+                                frame.height += this.superview.frame.height * this.metrics.scalar.height;
+                        }
+                        this.frame = frame;
                     }
-                    if (this.metrics.scalar){
-                        if (this.metrics.scalar.x)
-                            frame.x += this.superview.frame.width * this.metrics.scalar.x;
-                        if (this.metrics.scalar.y)
-                            frame.y += this.superview.frame.height * this.metrics.scalar.y;
-                        if (this.metrics.scalar.width)
-                            frame.width += this.superview.frame.width * this.metrics.scalar.width;
-                        if (this.metrics.scalar.height)
-                            frame.height += this.superview.frame.height * this.metrics.scalar.height;
-                    }
-                    this.frame = frame;
                 }
             }
             else{
@@ -151,7 +166,6 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
                 this.firstFrame = false;
                 return true;
             }
-
             if (this.frame.x == oldframe.x && this.frame.y == oldframe.y && this.frame.width == oldframe.width && this.frame.height == oldframe.height){
                 return false;
             }
@@ -246,7 +260,7 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             var text = this.text;
             ctx.font = this.decoration + " " + this.fontSize + "px " + this.font;
             ctx.fillStyle = this.color;
-            ctx.textBaseline = "hanging";
+            ctx.textBaseline = "top";
             var lines = this.generateLines();
             for (var i = 0; i < lines.length; i++){
                 var x;
@@ -361,7 +375,7 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
                 }
             }
         },
-        render: function(){
+        /*render: function(){
             var canvas = this.getCanvas();
 
             var ctx = canvas.getContext('2d');
@@ -377,6 +391,58 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
 
                 }
             return canvas;
+        },*/
+        layoutSubview:function(subview){
+            var xx = 0,
+                yy = 0;
+            for (var i = 0; i < this.subviews.length; i++){
+                var v = this.subviews[i];
+                if (v == subview){
+                    var w = 0;
+                    var wx = 0;
+                    var h = 0;
+                    var hx = 0;
+                    var frame = {x: 0, y: 0, width:0, height:0};
+                    if (subview.metrics && subview.metrics.width)
+                        w = subview.metrics.width;
+                    if (subview.metrics && subview.metrics.height)
+                        h = subview.metrics.height;
+
+                    if (subview.metrics && subview.metrics.scalar && subview.metrics.scalar.width)
+                        wx = subview.metrics.scalar.width;
+                    if (subview.metrics && subview.metrics.scalar && subview.metrics.scalar.height)
+                        hx = subview.metrics.scalar.height;
+
+                    if (this.horizontal) {
+                        frame.height = this.frame.height;
+                        frame.width = w + wx * this.frame.width;
+                    }
+                    else {
+                        frame.width = this.frame.width;
+                        frame.height = h + hx * this.frame.height;
+                    }
+
+                    frame.x = xx;
+                    frame.y = yy;
+                    subview.frame = frame;
+                }
+                else{
+                    if (this.horizontal)
+                        xx += v.frame.width;
+                    else
+                        yy += v.frame.height;
+                }
+            }
+        },
+        addSubview: function(v){
+            if (this.subviews) {
+                this.subviews.push(v);
+                v.superview = this;
+                v.refreshFrame();
+
+                return true;
+            }
+            return false;
         },
         horizontal: false
     });
@@ -497,9 +563,9 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             target.mousedrag(e);
         }
         else{
-            canvas.cursor = "normal";
+            canvas.style.cursor = "inherit";
             if (root.hitTest(e.clientX, e.clientY, "click")){
-                canvas.cursor = "pointer";
+                canvas.style.cursor = "pointer";
             }
         }
     });
