@@ -1,4 +1,4 @@
-var root = new View();
+var root;
 function initPage(){
     console.log("Init called!");
 
