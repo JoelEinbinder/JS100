@@ -82,7 +82,19 @@ function initPage(){
 
         var profile = getPanels(panelData.data[0]);
         var favorites = getPanels(panelData.data[1]);
-        var groupsData = getEndpoint("/me/groups");
+        var groupsData; 
+        getEndpoint("/me/groups", function(response){
+      
+              if (response && !response.error) {
+                /* handle the result */
+                console.log("Handling response!");
+                
+                console.log(response);
+
+                groupsData = response;
+              }
+
+        });
         var groups = setTimeout(function(){getPanelsMod(groupsData)}, 5000);
         var apps = getPanels(panelData.data[3])
         var friends = getPanels(panelData.data[4])

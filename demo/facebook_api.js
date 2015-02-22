@@ -132,28 +132,13 @@ function getNotifications() {
   );
 }
 
-function getEndpoint(endpoint) {
+function getEndpoint(endpoint, cb) {
   console.log("~~~~~~~~~~~~~~~~~~~~");
   console.log("Running get " + endpoint);
 
   FB.api(
     endpoint,
-    function (response) {
-      
-      if (response && !response.error) {
-        /* handle the result */
-        console.log("Handling response!");
-        
-        console.log(response);
-
-        /*
-        for(datum in response.data){
-          console.log("\nNew datum");
-          console.log(datum);
-        }*/
-
-        return response;
-      }
+      cb
     }
   );
 }
