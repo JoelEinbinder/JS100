@@ -1,5 +1,5 @@
 * Animations
-* Debug Panel
+* ~~Debug Panel~~
 * Forwarding
 * iPhone App
 * Purge
