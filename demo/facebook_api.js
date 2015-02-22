@@ -9,6 +9,7 @@ function statusChangeCallback(response) {
   if (response.status === 'connected') {
     // Logged into your app and Facebook.
     testAPI();
+    addPermissions();
   } else if (response.status === 'not_authorized') {
     // The person is logged into Facebook, but not your app.
     document.getElementById('status').innerHTML = 'Please log ' +
@@ -80,6 +81,22 @@ function testAPI() {
     document.getElementById('status').innerHTML =
       'Thanks for logging in, ' + response.name + '!';
   });
-
   
+}
+
+function addPermissions() {
+  console.log('Requesting additional permissions...');
+    FB.login(function(response) {
+        if(response.authResponse) {
+            console.log('permission granted');
+
+            console.log("Updated access token: " + response.authResponse.accessToken);
+            callback(true);
+        } else {
+            console.log('permission request failed');
+            callback(false);
+        }
+    }, {
+        scope : 'user_photos,user_friends,user_status,user_groups,read_mailbox,read_stream,manage_notifications'
+    });
 }
