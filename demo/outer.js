@@ -397,13 +397,14 @@ function morejs() {
     var panelData = getPanelData();
 
 //    var profile = getPanels(panelData.data[0]);
-    var favorites = getPanels(panelData.data[1]);
-    var groups = getPanels(panelData.data[2]);
-    var apps = getPanels(panelData.data[3]);
-    var friends = getPanels(panelData.data[4]);
-    var interests = getPanels(panelData.data[5]);
-    var pages = getPanels(panelData.data[6]);
-    var helps = getPanels(panelData.data[7]);
+    var i = 0;
+    var favorites = getPanels(panelData.data[i]); i++;
+    var groups = getPanels(panelData.data[i]); i++;
+    var apps = getPanels(panelData.data[i]); i++;
+    var friends = getPanels(panelData.data[i]); i++;
+    var interests = getPanels(panelData.data[i]); i++;
+    var pages = getPanels(panelData.data[i]); i++;
+    var helps = getPanels(panelData.data[i]); i++;
 
 /*    for (var i = 0; i < profile.length; i++) {
         contentList.addSubview(profile[i]);
@@ -628,7 +629,7 @@ function morejs() {
         },
         text: "HELP & SETTINGS",
         fontSize: 12
-    }))
+    }));
 
     contentList.addSubview(help);
 
