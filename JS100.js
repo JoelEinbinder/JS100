@@ -1,5 +1,107 @@
 var root, View, TextView, ResizingView, ListView, ScrollView;
 (function() {
+    var debugging = false;
+    var debug, panel;
+
+    function toggleDebug(){
+
+        if (debugging){
+            debugging = false;
+            debug.removeView(root);
+            root.metrics = {
+                x:0,
+                y:0,
+                scalar:{
+                    height:1,
+                    width: 1
+                }
+            };
+            root.refreshFrame();
+
+            return;
+        }
+        if (!debug){
+            debug = new View({
+                hitTest: function(x,y,event){
+                    var ret = panel.hitTest(x ,y,event);
+                    if (ret){
+                        return ret;
+                    }
+                    return this;
+                },
+                click: function(e){
+                    var f = View.prototype.hitTest.apply(this,[e.clientX, e.clientY, "click"]);
+                    if (f){
+                        panel.setFocus(f);
+                    }
+                }
+            });
+            panel = new ScrollView({
+                metrics:{
+                    x: -250,
+                    y: 0,
+                    width: 250,
+                    height: 0,
+                    scalar:{
+                        width:0,
+                        height: 1,
+                        x: 1,
+                        y: 0
+                    }
+                },
+                focus: null,
+                backgroundColor:"blue",
+                setFocus: function(v){
+                    this.focus = v;
+                    this.subviews = [];
+                    var lv = new ListView({
+                        metrics:{
+                            x:0,
+                            y:0,
+                            scalar:{
+                                width:1,
+                            }
+                        },
+                        resizesToContent:true,
+                        backgroundColor:"blue"
+                    });
+                    this.addSubview(lv)
+                    for (var i in v) {
+                        lv.addSubview(new TextView({
+                            text: i + ": " + v[i],
+                            metrics: {},
+                            color:"white",
+                            prop:i,
+                            click:function(){
+                                panel.editProperty(this.prop)
+                            }
+                        }));
+                    }
+                    this.setDirty();
+                },
+                
+                editProperty: function(prop){
+                    this.subviews = [];
+                    this.addSubview(new RTE(this.focus[prop].toString()));
+                }
+            });
+            debug.refreshFrame();
+            debug.addSubview(panel);
+        }
+        debugging = true;
+        root.metrics = {
+            x:0,
+            y:0,
+            width:-250,
+            height: 0,
+            scalar:{
+                height:1,
+                width: 1
+            }
+        };
+        debug.addSubview(root);
+
+    }
     document.addEventListener("DOMContentLoaded", init);
     var canvas = document.createElement("canvas");
     canvas.style.position = "absolute";
@@ -11,7 +113,11 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
         setup = true;
         canvas.setAttribute("width",window.innerWidth);
         canvas.setAttribute("height",window.innerHeight);
-        root.refreshFrame();
+        if (debugging){
+            debug.refreshFrame();
+        }
+        else
+            root.refreshFrame();
         paint(0, true)
     }
     function wholeFrame(){
@@ -49,7 +155,10 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
     function paint(time, once){
         ctx.clearRect(0,0,canvas.width,canvas.height);
         if (root) {
-            ctx.drawImage(root.paint(), 0, 0);
+            if (debugging)
+                ctx.drawImage(debug.paint(),0,0);
+            else
+                ctx.drawImage(root.paint(), 0, 0);
         }
         else{
             ctx.fillRect(0,0,canvas.width,canvas.height);
@@ -207,6 +316,17 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
                 return true;
             }
             return false;
+        },
+        removeView: function(v){
+            if (this.subviews)
+                for (var i = 0; i < this.subviews.length; i++){
+                    if (this.subviews[i] == v){
+                        this.subviews.splice(i,1);
+                        this.refreshFrame();
+                        return;
+                    }
+                }
+
         },
         hitTest: function(x,y,event){
             if (x > this.frame.x && x < this.frame.x + this.frame.width)
@@ -520,6 +640,11 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
         },
         setSrc: function(src){
             this.src = src;
+            this.image = new Image();
+            var me = this;
+            this.image.onload = function(){
+                me.setDirty();
+            };
             this.image.src = src;
         },
         src: ""
@@ -578,10 +703,18 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
         var x = e.clientX;
         var y = e.clientY;
         var hit = false;
-        if (root)
+        if (debugging)
+            hit = debug.hitTest(x,y, e.type);
+        else if (root)
             hit = root.hitTest(x,y, e.type);
 
+        console.log(e.type,hit);
         if (hit)
             hit[e.type](e);
+    }
+    document.onkeydown = function(e){
+        if (e.ctrlKey && e.which == 65){
+            toggleDebug();
+        }
     }
 })();

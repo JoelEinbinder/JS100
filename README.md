@@ -1,6 +1,10 @@
+* Animations
+* Debug Panel
+* Forwarding
+* iPhone App
 * Purge
-* depth
-* setDirty
+* ~~depth~~
+* ~~setDirty~~
 * ~~Animations~~
 * ~~NonResizing list~~
 * ~~Text Justify~~
