@@ -87,11 +87,11 @@ function initPage(){
 
         var apps = getPanels(panelData.data[3])
         //var friends = getPanels(panelData.data[4])
-        getEndpointWrapper("/me/friendlists", "FRIENDS", 2);
+        //getEndpointWrapper("/me/friendlists", "FRIENDS", 2);
         //var interests = getPanels(panelData.data[5])
-        //getEndpointWrapper("/me/interests", "INTERESTS", 3);
+        getEndpointWrapper("/me/interests", "INTERESTS", 3);
         //var pages = getPanels(panelData.data[6])
-        //getEndpointWrapper("/me/accounts", "PAGES", 3);
+        getEndpointWrapper("/me/accounts", "PAGES", 3);
         var helps = getPanels(panelData.data[7])
 
         for (var i = 0; i < profile.length; i++) {
@@ -359,6 +359,7 @@ function initPage(){
 
             if(data.data == 'undefined'){
                 //None to draw!
+                content.log("No content to populate with!");
                 var panelRow = new View({
                     metrics: {
                         x: 0,
@@ -392,8 +393,6 @@ function initPage(){
                     text: "Add New",
                     fontSize: 16
                 }));
-
-                panel.push(panelRow);
 
                 console.log(panelRow);
 
