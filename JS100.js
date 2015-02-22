@@ -2,6 +2,7 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
 (function() {
     var debugging = false;
     var debug, panel, editor = null;
+    var debugsize = 500;
     function toggleDebug(){
 
         if (debugging){
@@ -37,9 +38,9 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             });
             panel = new ScrollView({
                 metrics:{
-                    x: -250,
+                    x: -debugsize,
                     y: 0,
-                    width: 250,
+                    width: debugsize,
                     height: 0,
                     scalar:{
                         width:0,
@@ -49,7 +50,7 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
                     }
                 },
                 focus: null,
-                backgroundColor:"blue",
+                backgroundColor:"black",
                 setFocus: function(v){
                     this.focus = v;
                     this.subviews = [];
@@ -62,17 +63,39 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
                             }
                         },
                         resizesToContent:true,
-                        backgroundColor:"blue"
+                        backgroundColor:"black"
                     });
                     this.addSubview(lv)
                     for (var i in v) {
                         lv.addSubview(new TextView({
-                            text: i + ": " + v[i],
+                            text: i+":",
                             metrics: {},
                             color:"white",
+                            fontSize: 20,
+                            font:"Courier",
+                            decoration:"bold",
+                            prop:i,
+                            click:function(){
+
+                                panel.editProperty(this.prop)
+                            }
+                        }));
+                        lv.addSubview(new TextView({
+                            text: ""+v[i],
+                            metrics: {},
+                            color:"white",
+                            fontSize: 20,
+                            font:"Courier",
                             prop:i,
                             click:function(){
                                 panel.editProperty(this.prop)
+                            }
+                        }));
+                        lv.addSubview(new View({
+                            metrics:{
+                                x:0,y:0,
+                                height:50
+
                             }
                         }));
                     }
@@ -80,9 +103,14 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
                 },
                 editProperty: function(prop){
                     this.subviews = [];
-                    editor = new RTE(this.focus[prop].toString());
+                    if (this.focus[prop] instanceof Function)
+                        editor = new RTE(this.focus[prop] + "");
+                    else
+                        editor = new RTE('"' + this.focus[prop] + '"\n');
+                    console.log(this.focus,prop,editor);
                     editor.prop = prop;
                     this.addSubview(editor);
+                    this.scroll(0,0);
                 }
             });
             debug.refreshFrame();
@@ -92,7 +120,7 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
         root.metrics = {
             x:0,
             y:0,
-            width:-250,
+            width:-debugsize,
             height: 0,
             scalar:{
                 height:1,
@@ -583,6 +611,21 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             }
             return canvas;
         },
+        hitTest: function(x,y,event){
+            if (x > this.frame.x && x < this.frame.x + this.frame.width)
+                if (y > this.frame.y && y < this.frame.y + this.frame.height){
+                    if (this.subviews)
+                        for (var i = 0; i < this.subviews.length; i++){
+                            var hit = this.subviews[i].hitTest(x-this.frame.x + this.scrollx,y-this.frame.y + this.scrolly,event);
+                            if (hit)
+                                return hit;
+                        }
+                    if (!event || this[event])
+                        return this;
+                }
+            return false;
+        },
+
         wheel: function(e){
             this.scroll(e.deltaX, e.deltaY);
         },
@@ -716,8 +759,10 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
         if (e.ctrlKey && e.which == 65){
             if (editor){
                 console.log("got editor!")
-                panel.setFocus(panel.focus);
                 panel.focus[editor.prop] = eval("["+editor.getText()+"]")[0];
+                panel.focus.refreshFrame();
+                panel.focus.setDirty();
+                panel.setFocus(panel.focus);
                 editor = null;
             }
             else
@@ -977,7 +1022,7 @@ function RTE(startText) {
         draw: function () {
             var point = this.segment.offsetPosition(this.offset);
             ctx.fillStyle = "rgba(0,0,0,.6)";
-            if (this.anchorSegment === this.segment && this.anchorOffset === this.offset) {
+            if (true){//this.anchorSegment === this.segment && this.anchorOffset === this.offset) {
                 if (!document.hasFocus || document.hasFocus())
                     ctx.fillRect(Math.max(point.x - 1, 0), this.segment.y + point.y, 2, this.segment.lh());
             }
@@ -1087,7 +1132,7 @@ function RTE(startText) {
                 return;
             }
         }
-        formatter.visible = true;
+        //formatter.visible = true;
         for (var i = 0; i < segments.length; i++) {
             if (segments[i].click(offsetx, offsety, dragging)) {
                 return;

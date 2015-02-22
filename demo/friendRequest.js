@@ -20,7 +20,7 @@
             y: 12.5,
             height: 20,
             scalar: {
-                width: 1,
+                width: 1
             }
         },
         justify: "center",
@@ -52,8 +52,8 @@
                 width: 1,
                 height: 1
             }
-        },
-    })
+        }
+    });
 
     var friendRequestTitle = new View({
         metrics: {
@@ -64,7 +64,7 @@
                 width:1
             }
         }
-    })
+    });
 
     friendRequestTitle.addSubview(new TextView({
         metrics: {
@@ -76,7 +76,7 @@
             }
         },
         text: "Friend Requests"
-    }))
+    }));
 
     friendRequestTitle.addSubview(new ImageView({
         metrics: {
@@ -90,7 +90,7 @@
             }
         },
         src: "http://www.polyvore.com/cgi/img-thing?.out=jpg&size=l&tid=33839070"
-    }))
+    }));
 
     contentList.addSubview(friendRequestTitle);
 
@@ -230,7 +230,11 @@
                     y: 60,
                     height: 30,
                     width: 75
+                },
+                click: function(){
+                    alert("hi")
                 }
+
             });
 
             confirmFriend.addSubview(new TextView({
