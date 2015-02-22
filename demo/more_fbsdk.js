@@ -89,9 +89,9 @@ function initPage(){
         //var friends = getPanels(panelData.data[4])
         getEndpointWrapper("/me/friendlists", "FRIENDS", 2);
         //var interests = getPanels(panelData.data[5])
-        getEndpointWrapper("/me/interests", "INTERESTS", 3);
+        //getEndpointWrapper("/me/interests", "INTERESTS", 3);
         //var pages = getPanels(panelData.data[6])
-        getEndpointWrapper("/me/accounts", "PAGES", 3);
+        //getEndpointWrapper("/me/accounts", "PAGES", 3);
         var helps = getPanels(panelData.data[7])
 
         for (var i = 0; i < profile.length; i++) {
