@@ -87,6 +87,10 @@ function testAPI() {
   });*/
   //getNotifications();
   getEndpoint("/me/notifications");
+
+  console.log("\n\n");
+
+  getEndpoint("/me/groups");
   
 }
 
