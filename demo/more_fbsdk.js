@@ -260,7 +260,7 @@ function initPage(){
 
         for (var i = 0; i < pages.length; i++) {
             contentList.addSubview(pages[i]);
-        }
+        }*/
 
         help = new View({
             backgroundColor: "#f7f7f7",
@@ -273,7 +273,7 @@ function initPage(){
                 }
             },
             strokeColor: "gray"
-        });*/
+        });
 
         help.addSubview(new TextView({
             metrics: {
