@@ -109,7 +109,7 @@ function addPermissions() {
 
 function getNotifications() {
   console.log("Running get notifications");
-  console.log(FB);
+  console.log(FB.getAccessToken());
 
   FB.api(
     "/me/notifications",
