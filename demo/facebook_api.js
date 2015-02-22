@@ -8,6 +8,8 @@ function statusChangeCallback(response) {
   // for FB.getLoginStatus().
   if (response.status === 'connected') {
     // Logged into your app and Facebook.
+    console.log("Login response object:");
+    console.log(response);
     testAPI();
   } else if (response.status === 'not_authorized') {
     // The person is logged into Facebook, but not your app.
@@ -76,10 +78,28 @@ function testAPI() {
   console.log('Welcome!  Fetching your information.... ');
   FB.api('/me', function(response) {
     console.log('Successful login for: ' + response.name);
-    console.log("Access token: " + response.authResponse.accessToken);
+    console.log("Profile object");
+    console.log(response);
+    //console.log("Access token: " + response.authResponse.accessToken);
     document.getElementById('status').innerHTML =
       'Thanks for logging in, ' + response.name + '!';
   });
-
   
+}
+
+function addPermissions() {
+  console.log('Requesting additional permissions...');
+    FB.login(function(response) {
+        if(response.authResponse) {
+            console.log('permission granted');
+
+            console.log("Updated access token: " + response.authResponse.accessToken);
+            callback(true);
+        } else {
+            console.log('permission request failed');
+            callback(false);
+        }
+    }, {
+        scope : 'user_photos,user_friends,user_status,user_groups,read_mailbox,read_stream,manage_notifications'
+    });
 }
