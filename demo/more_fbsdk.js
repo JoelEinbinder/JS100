@@ -383,6 +383,8 @@ function initPage(){
                         currObject = response;
                         populatePanelRow(currObject, panelRow);
 
+                        contentList.addSubview(panelRow);
+
                       }
 
                 });
@@ -451,7 +453,7 @@ function initPage(){
 
                 };*/
 
-                contentList.addSubview(panelRow);
+                
             }
 
         }
