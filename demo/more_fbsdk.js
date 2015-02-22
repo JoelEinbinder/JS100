@@ -382,17 +382,77 @@ function initPage(){
 
                         currObject = response;
                         populatePanelRow(currObject, panelRow);
+
                       }
 
                 });
 
                 panel.push(panelRow);
 
-                contentList.addSubview(panelRow);
+                
 
             }
 
-            return panel;
+            function populatePanelRow(currObject, panelRow){
+                panelRow.addSubview(new ImageView({
+                    metrics: {
+                        x: 7.5,
+                        y: 7.5,
+                        width: 30,
+                        height: 30
+                    },
+                    src:currObject.icon
+                }));
+
+                panelRow.addSubview(new TextView({
+                    metrics: {
+                        x: 45,
+                        y: 15,
+                        height: 20,
+                        scalar: {
+                            width:0.5
+                        }
+                    },
+                    text: currObject.name,
+                    fontSize: 16
+                }));
+
+                /*
+
+                if (data.panels.notification[i]) {
+                    notif = new View({
+                        metrics: {
+                            x: -30,
+                            y: 12.5,
+                            width: 20,
+                            height: 20,
+                            scalar: {
+                                x: 1
+                            }
+                        },
+                        backgroundColor: "blue",
+                        strokeColor:"white"
+                    });
+
+                    notif.addSubview(new TextView({
+                        metrics: {
+                            x: 0,
+                            y: 5,
+                            width: 20,
+                            height: 20,
+                        },
+                        text: data.panels.numNotification[i].toString(),
+                        color: "white",
+                        fontSize: 10,
+                        justify: "center"
+                    }))
+
+                    panelRow.addSubview(notif);
+
+                };*/
+
+                contentList.addSubview(panelRow);
+            }
 
         }
 
@@ -858,63 +918,4 @@ function initPage(){
     })();
 
     return root;
-}
-
-function populatePanelRow(currObject, panelRow){
-    panelRow.addSubview(new ImageView({
-                    metrics: {
-                        x: 7.5,
-                        y: 7.5,
-                        width: 30,
-                        height: 30
-                    },
-                    src:currObject.icon
-                }));
-
-                panelRow.addSubview(new TextView({
-                    metrics: {
-                        x: 45,
-                        y: 15,
-                        height: 20,
-                        scalar: {
-                            width:0.5
-                        }
-                    },
-                    text: currObject.name,
-                    fontSize: 16
-                }));
-
-                /*
-
-                if (data.panels.notification[i]) {
-                    notif = new View({
-                        metrics: {
-                            x: -30,
-                            y: 12.5,
-                            width: 20,
-                            height: 20,
-                            scalar: {
-                                x: 1
-                            }
-                        },
-                        backgroundColor: "blue",
-                        strokeColor:"white"
-                    });
-
-                    notif.addSubview(new TextView({
-                        metrics: {
-                            x: 0,
-                            y: 5,
-                            width: 20,
-                            height: 20,
-                        },
-                        text: data.panels.numNotification[i].toString(),
-                        color: "white",
-                        fontSize: 10,
-                        justify: "center"
-                    }))
-
-                    panelRow.addSubview(notif);
-
-                };*/
 }
