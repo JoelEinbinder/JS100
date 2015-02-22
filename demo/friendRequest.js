@@ -195,121 +195,171 @@ init();
 
 
 
-function getFriendRequests() {
+function getFriendRequests(a) {
     var data = getFriendRequestData().data;
 
     var friendRequests = [];
     for (var i = 0; i < data.length; i++) {
-        var friendrequest = data[i];
+        (function () {
+            var friendrequest = data[i];
 
-        var friendRequestRow = new View({
-            backgroundColor: (friendrequest.viewed) ? "white" : "#dfe3ee",
-            metrics: {
-                x: 0,
-                y: 0,
-                height: 100,
-                scalar: {
-                    width: 1
+            var friendRequestRow = new View({
+                backgroundColor: (friendrequest.viewed) ? "white" : "#dfe3ee",
+                metrics: {
+                    x: 0,
+                    y: 0,
+                    height: 100,
+                    scalar: {
+                        width: 1
+                    }
+                },
+                strokeColor: "gray",
+
+            })
+
+            friendRequestRow.addSubview(new ImageView({
+                metrics: {
+                    x: 10,
+                    y: 10,
+                    width: 80,
+                    height: 80
+                },
+                src: friendrequest.img
+            }));
+
+            friendRequestRow.addSubview(new TextView({
+                metrics: {
+                    x: 100,
+                    y: 15,
+                    height: 30,
+                    scalar: {
+                        width: 1
+                    }
+                },
+                text: friendrequest.name,
+                color: "#3b5998",
+                decoration: "bold"
+            }));
+
+            friendRequestRow.addSubview(new TextView({
+                metrics: {
+                    x: 100,
+                    y: 37.5,
+                    height: 20,
+                    scalar: {
+                        width: 1
+                    }
+                },
+                text: friendrequest.friend + " is a mutual friend.",
+                fontSize: 12
+            }));
+
+            var confirmDelete = new View({
+                metrics: {
+                    x: 100,
+                    y: 60,
+                    height: 30,
+                    width: 250
+                },
+                strokeColor: friendRequestRow.backgroundColor
+            })
+
+            var confirmFriend = new View({
+                backgroundColor: "#1975d1",
+                metrics: {
+                    x: 0,
+                    y: 0,
+                    scalar: {
+                        width: 0.45,
+                        height: 1
+                    }
+                },
+                click: function () {
+                    confirmDelete.makeAnimation({
+                        x: 500,
+                        alpha: 0
+                    }, 15);
+                    var nowFriends = new TextView({
+                        metrics: {
+                            x: 100,
+                            y: 60,
+                            height: 30,
+                            width: 250
+                        },
+                        justify: "center",
+                        text: "You are now friends"
+                    });
+                    friendRequestRow.addSubview(nowFriends);
                 }
-            },
-            strokeColor: "gray"
-        })
 
-        friendRequestRow.addSubview(new ImageView({
-            metrics: {
-                x: 10,
-                y: 10,
-                width: 80,
-                height: 80
-            },
-            src: friendrequest.img
-        }));
-            
-        friendRequestRow.addSubview(new TextView({
-            metrics: {
-                x: 100,
-                y: 15,
-                height: 30,
-                scalar: {
-                    width: 1
+            });
+
+            confirmFriend.addSubview(new TextView({
+                metrics: {
+                    x: 0,
+                    y: 7.5,
+                    scalar: {
+                        width: 1,
+                        height: 1
+                    }
+                },
+                justify: "center",
+                text: "Confirm",
+                color: "white",
+                fontSize: 12
+            }));
+
+            var deleteFriend = new View({
+                backgroundColor: "white",
+                metrics: {
+                    y: 0,
+                    scalar: {
+                        x: 0.55,
+                        width: 0.45,
+                        height: 1
+                    }
+                },
+                click: function () {
+                    confirmDelete.makeAnimation({
+                        x: 500,
+                        alpha: 0
+                    }, 5);
+                    var nowFriends = new TextView({
+                        metrics: {
+                            x: 100,
+                            y: 60,
+                            height: 30,
+                            width: 250
+                        },
+                        justify: "center",
+                        text: "Request ignored"
+                    });
+                    friendRequestRow.addSubview(nowFriends);
                 }
-            },
-            text: friendrequest.name,
-            color: "#3b5998",
-            decoration: "bold"
-        }));
+            });
 
-        friendRequestRow.addSubview(new TextView({
-            metrics: {
-                x: 100,
-                y: 37.5,
-                height: 20,
-                scalar: {
-                    width: 1
-                }
-            },
-            text: friendrequest.friend + " is a mutual friend.",
-            fontSize: 12
-        }));
+            deleteFriend.addSubview(new TextView({
+                metrics: {
+                    x: 0,
+                    y: 7.5,
+                    scalar: {
+                        width: 1,
+                        height: 1
+                    }
+                },
+                justify: "center",
+                text: "Delete",
+                color: "black",
+                fontSize: 12
+            }));
 
-        var confirmFriend = new View({
-            backgroundColor: "#1975d1",
-            metrics: {
-                x: 100,
-                y: 60,
-                height: 30,
-                width: 75
-            },
-            click: function(){
-                alert("hi")
-            }
+            confirmDelete.addSubview(confirmFriend);
+            confirmDelete.addSubview(deleteFriend);
 
-        });
+            friendRequestRow.addSubview(confirmDelete);
 
-        confirmFriend.addSubview(new TextView({
-            metrics: {
-                x: 0,
-                y: 7.5,
-                scalar: {
-                    width: 1,
-                    height: 1
-                }
-            },
-            justify: "center",
-            text: "Confirm",
-            color: "white",
-            fontSize: 12
-        }));
-
-        var deleteFriend = new View({
-            backgroundColor: "white",
-            metrics: {
-                x: 187.5,
-                y: 60,
-                height: 30,
-                width: 75
-            }
-        });
-
-        deleteFriend.addSubview(new TextView({
-            metrics: {
-                x: 0,
-                y: 7.5,
-                scalar: {
-                    width: 1,
-                    height: 1
-                }
-            },
-            justify: "center",
-            text: "Delete",
-            color: "black",
-            fontSize: 12
-        }));
-
-        friendRequestRow.addSubview(confirmFriend);
-        friendRequestRow.addSubview(deleteFriend);
-            
-        friendRequests.push(friendRequestRow);
+            friendRequests.push(friendRequestRow);
+        })();
     }
     return friendRequests;
 }
@@ -319,90 +369,113 @@ function getKnowPeople() {
 
     var knowPeople = [];
     for (var i = 0; i < data.length; i++) {
-        var knowperson = data[i];
+        (function () {
+            var knowperson = data[i];
 
-        var knowPeopleRow = new View({
-            metrics: {
-                x: 0,
-                y: 0,
-                height: 100,
-                scalar: {
-                    width: 1
+            var knowPeopleRow = new View({
+                metrics: {
+                    x: 0,
+                    y: 0,
+                    height: 100,
+                    scalar: {
+                        width: 1
+                    }
+                },
+                strokeColor: "white"
+            })
+
+            knowPeopleRow.addSubview(new ImageView({
+                metrics: {
+                    x: 10,
+                    y: 12.5,
+                    width: 75,
+                    height: 75
+                },
+                src: knowperson.img
+            }));
+
+            knowPeopleRow.addSubview(new TextView({
+                metrics: {
+                    x: 100,
+                    y: 35,
+                    height: 30,
+                    scalar: {
+                        width: 1
+                    }
+                },
+                text: knowperson.name,
+                decoration: "bold"
+            }));
+
+            knowPeopleRow.addSubview(new TextView({
+                metrics: {
+                    x: 100,
+                    y: 55,
+                    height: 20,
+                    scalar: {
+                        width: 1
+                    }
+                },
+                text: knowperson.numMutFriends + " mutual friends",
+                fontSize: 12,
+                color: "gray"
+            }));
+
+            var addFriend = new View({
+                backgroundColor: "#3b5998",
+                metrics: {
+                    x: -85,
+                    y: 35,
+                    height: 25,
+                    width: 75,
+                    scalar: {
+                        x: 1
+                    }
+                },
+                click: function () {
+                    addFriend.makeAnimation({
+                        x: 0,
+                        alpha: 0
+                    }, 5);
+                    var requestSent = new TextView({
+                        metrics: {
+                            x: -85,
+                            y: 35,
+                            height: 25,
+                            width: 75,
+                            scalar: {
+                                x: 1
+                            }
+                        },
+                        justify: "center",
+                        text: "Request sent"
+                    });
+                    knowPeopleRow.addSubview(requestSent);
                 }
-            },
-            strokeColor: "white"
-        })
+            });
 
-        knowPeopleRow.addSubview(new ImageView({
-            metrics: {
-                x: 10,
-                y: 12.5,
-                width: 75,
-                height: 75
-            },
-            src: knowperson.img
-        }));
+            addFriend.addSubview(new TextView({
+                metrics: {
+                    x: 0,
+                    y: 7,
+                    scalar: {
+                        width: 1,
+                        height: 1
+                    }
+                },
+                justify: "center",
+                text: "Add Friend",
+                color: "white",
+                fontSize: 12
+            }));
 
-        knowPeopleRow.addSubview(new TextView({
-            metrics: {
-                x: 100,
-                y: 35,
-                height: 30,
-                scalar: {
-                    width: 1
-                }
-            },
-            text: knowperson.name,
-            decoration: "bold"
-        }));
+            knowPeopleRow.addSubview(addFriend);
 
-        knowPeopleRow.addSubview(new TextView({
-            metrics: {
-                x: 100,
-                y: 55,
-                height: 20,
-                scalar: {
-                    width: 1
-                }
-            },
-            text: knowperson.numMutFriends + " mutual friends",
-            fontSize: 12,
-            color:"gray"
-        }));
-
-        var addFriend = new View({
-            backgroundColor: "#3b5998",
-            metrics: {
-                x:-85,
-                y: 35,
-                height: 25,
-                width: 75,
-                scalar: {
-                    x:1
-                }
-            }
-        });
-
-        addFriend.addSubview(new TextView({
-            metrics: {
-                x: 0,
-                y: 7,
-                scalar: {
-                    width: 1,
-                    height: 1
-                }
-            },
-            justify: "center",
-            text: "Add Friend",
-            color: "white",
-            fontSize:12
-        }));
-
-        knowPeopleRow.addSubview(addFriend);
-
-        knowPeople.push(knowPeopleRow);
+            knowPeople.push(knowPeopleRow);
+        })();
     }
     return knowPeople;
+
 }
 
 function getFriendRequestData() {
