@@ -15,8 +15,10 @@
 
     /* old navbar stuff */
     var navBar = getNavBar();
-    contentList.addSubview(navBar)
+    // contentList.addSubview(navBar)
+    root.addSubview(navBar);
 
+    /*
     var titleBar = getTitleBar();
     contentList.addSubview(titleBar);
 
@@ -24,6 +26,7 @@
     for (var i = 0; i < notifications.length; i++) {
         contentList.addSubview( notifications[i] );
     }
+    */
 
 
     /*****************************
@@ -32,12 +35,11 @@
     function getNavBar() {
         var fbBlue = "#3B5998"
         var navBar = new ListView({
-            backgroundColor: fbBlue,
             metrics: {
                 x: 0,
-                y: 0,
                 height: 45.5,
                 scalar: {
+                    y: 1,
                     width: 1
                 }
             },
