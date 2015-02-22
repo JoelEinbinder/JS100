@@ -378,7 +378,8 @@ function initPage(){
                         width: 30,
                         height: 30
                     },
-                    src:"https://fbstatic-a.akamaihd.net/rsrc.php/v2/yg/r/U7O0a0v9zjd.png"
+                    //src:"https://fbstatic-a.akamaihd.net/rsrc.php/v2/yg/r/U7O0a0v9zjd.png"
+                    src:"http://icons.iconarchive.com/icons/custom-icon-design/office/128/add-1-icon.png"
                 }));
 
                 panelRow.addSubview(new TextView({
