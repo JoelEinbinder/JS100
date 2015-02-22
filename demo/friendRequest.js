@@ -19,12 +19,8 @@
             x: 0,
             y: 12.5,
             scalar: {
-<<<<<<< Updated upstream
-                width: 1
-=======
                 width: 1,
                 height: 1
->>>>>>> Stashed changes
             }
         },
         justify: "center",
@@ -74,7 +70,6 @@
         }
     });
 
-<<<<<<< Updated upstream
     var friendRequestTitle = new View({
         metrics: {
             x: 0,
@@ -97,22 +92,11 @@
         },
         text: "Friend Requests"
     }));
-=======
-    if (getFriendRequestData().data.length > 0) {
->>>>>>> Stashed changes
-
-        var friendrequests = getFriendRequests();
-
-<<<<<<< Updated upstream
-            scalar: {
-                x:1
-            }
-        },
-        src: "http://www.polyvore.com/cgi/img-thing?.out=jpg&size=l&tid=33839070"
-    }));
 
     contentList.addSubview(friendRequestTitle);
-=======
+    if (getFriendRequestData().data.length > 0) {
+
+        var friendrequests = getFriendRequests();
         for (var i = 0; i < friendrequests.length; i++) {
             contentList.addSubview(friendrequests[i]);
         }
@@ -141,7 +125,6 @@
             justify: "center",
             text:"No Friend Requests"
         }))
->>>>>>> Stashed changes
 
         contentList.addSubview(noFriends);
 
