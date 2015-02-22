@@ -124,7 +124,7 @@ function initPage(){
                 contentList.addSubview(group);
 
                 for (var i = 0; i < groups.length; i++) {
-                    setTimeout(function(){contentList.addSubview(groups[i]);}, 3000);
+                    contentList.addSubview(groups[i]);
                 }
 
 
