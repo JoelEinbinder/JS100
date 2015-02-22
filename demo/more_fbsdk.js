@@ -400,7 +400,7 @@ function initPage(){
                 return;
             }
 
-            console.log(data.data);
+            console.log(data.data.length);
 
             var length = ((data.data.length > numToShow) ? numToShow : data.data.length); //Cap section at length = 5
             //length = 1;
