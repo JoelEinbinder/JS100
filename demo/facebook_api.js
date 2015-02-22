@@ -118,9 +118,9 @@ function getNotifications() {
 
         console.log(response);
 
-        for(notification in response){
+        for(notification in response.data){
           console.log("\nNew notification:");
-          console.log(notification.data);
+          console.log(notification);
         }
       }
     }
