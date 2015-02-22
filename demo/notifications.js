@@ -475,7 +475,6 @@ function getNotificationsData() {
 
 /** Dummy data, to be replaced with real api **/
 function getTimeSince( date ) {
-    // TODO: Do better...
     var dateTokens = new Date( date ).toString().split(" ");
     return dateTokens[1] + " " + dateTokens[2] + " at " + dateTokens[4]
 }
