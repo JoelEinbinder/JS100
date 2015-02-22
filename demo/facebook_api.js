@@ -85,8 +85,8 @@ function testAPI() {
     getNotifications();
 
   });*/
-  getNotifications();
-
+  //getNotifications();
+  getEndpoint("/me/notifications");
   
 }
 
@@ -124,5 +124,25 @@ function getNotifications() {
         }
       }
     }
-);
+  );
+}
+
+function getEndpoint(endpoint) {
+  console.log("Running get " + endpoint);
+
+  FB.api(
+    endpoint,
+    function (response) {
+      if (response && !response.error) {
+        /* handle the result */
+
+        console.log(response);
+
+        for(datum in response.data){
+          console.log("\nNew datum");
+          console.log(datum);
+        }
+      }
+    }
+  );
 }
