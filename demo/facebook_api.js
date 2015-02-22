@@ -119,7 +119,7 @@ function getNotifications() {
         console.log(response);
 
         for(notification in response){
-          console("\nNew notification:");
+          console.log("\nNew notification:");
           console.log(notification);
         }
       }
