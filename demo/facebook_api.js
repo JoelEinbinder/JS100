@@ -80,9 +80,10 @@ function testAPI() {
     console.log('Successful login for: ' + response.name);
     console.log("Profile object");
     console.log(response);
-    //console.log("Access token: " + response.authResponse.accessToken);
     document.getElementById('status').innerHTML =
       'Thanks for logging in, ' + response.name + '!';
+
+    getNotifications();
   });
   
 }
@@ -102,4 +103,22 @@ function addPermissions() {
     }, {
         scope : 'user_photos,user_friends,user_status,user_groups,read_mailbox,read_stream,manage_notifications'
     });
+}
+
+function getNotifications() {
+  FB.api(
+    "/me/notifications",
+    function (response) {
+      if (response && !response.error) {
+        /* handle the result */
+
+        console.print(response);
+
+        for(notification in response){
+          console("\nNew notification:");
+          console.print(notification);
+        }
+      }
+    }
+);
 }
