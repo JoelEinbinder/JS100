@@ -79,6 +79,7 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
                     }
                     this.setDirty();
                 },
+                
                 editProperty: function(prop){
                     this.subviews = [];
                     this.addSubview(new RTE(this.focus[prop].toString()));
