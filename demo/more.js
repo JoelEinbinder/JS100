@@ -12,7 +12,7 @@
             }
         },
         strokeColor: "white"
-    })
+    });
     root.addSubview(content);
 
     var title = new View({
