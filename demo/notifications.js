@@ -13,6 +13,7 @@
     });
     root.addSubview(contentList);
 
+    /* old navbar stuff */
     var navBar = getNavBar();
     contentList.addSubview(navBar)
 
@@ -30,42 +31,213 @@
      *****************************/
     function getNavBar() {
         var fbBlue = "#3B5998"
-
-        var navBar = new View({
+        var navBar = new ListView({
+            backgroundColor: fbBlue,
             metrics: {
                 x: 0,
                 y: 0,
+                height: 45.5,
                 scalar: {
-                    width: 1,
-                    height: 0.08
+                    width: 1
                 }
             },
-            backgroundColor: fbBlue
+            horizontal: true
         });
 
+        // Tab 1 - Newsfeed
+        var newsfeedTab = new ImageView({
+            metrics: {
+                width: 30,
+                height: 30,
+                x: -15,
+                y: -15,
+                scalar: {
+                    x: 0.5,
+                    y: 0.5
+                }
+            },
+            src: "imgs/content.png"
+        });
+        var newsfeedTabWrapper = new View({
+            backgroundColor: fbBlue,
+            strokeColor: fbBlue,
+            metrics: {
+                x: 0, 
+                y: 0,
+                scalar: {
+                    width: 0.1667,
+                    height: 1
+                }
+            },
+        });
+        newsfeedTabWrapper.addSubview(newsfeedTab);
+
+        var requestsTab = new ImageView({
+            metrics: {
+                width: 30,
+                height: 30,
+                x: -15,
+                y: -15,
+                scalar: {
+                    x: 0.5,
+                    y: 0.5
+                }
+            },
+            src: "imgs/content.png"
+        });
+        var requestsTabWrapper = new View({
+            backgroundColor: fbBlue,
+            strokeColor: fbBlue,
+            metrics: {
+                x: 0, 
+                y: 0,
+                scalar: {
+                    width: 0.1667,
+                    height: 1
+                }
+            }
+        });
+        requestsTabWrapper.addSubview(requestsTab);
+
+        var messagesTab = new ImageView({
+            metrics: {
+                width: 30,
+                height: 30,
+                x: -15,
+                y: -15,
+                scalar: {
+                    x: 0.5,
+                    y: 0.5
+                }
+            },
+            src: "imgs/content.png"
+        });
+        var messagesTabWrapper = new View({
+            backgroundColor: fbBlue,
+            strokeColor: fbBlue,
+            metrics: {
+                x: 0, 
+                y: 0,
+                scalar: {
+                    width: 0.1667,
+                    height: 1
+                }
+            }
+        });
+        messagesTabWrapper.addSubview(messagesTab);
+
+        var notificationsTab = new ImageView({
+            metrics: {
+                width: 30,
+                height: 30,
+                x: -15,
+                y: -15,
+                scalar: {
+                    x: 0.5,
+                    y: 0.5
+                }
+            },
+            src: "imgs/content.png"
+        });
+        var notificationsTabWrapper = new View({
+            backgroundColor: fbBlue,
+            strokeColor: fbBlue,
+            metrics: {
+                x: 0, 
+                y: 0,
+                scalar: {
+                    width: 0.1667,
+                    height: 1
+                }
+            }
+        });
+        notificationsTabWrapper.addSubview(notificationsTab);
+
+        var searchTab = new ImageView({
+            metrics: {
+                width: 30,
+                height: 30,
+                x: -15,
+                y: -15,
+                scalar: {
+                    x: 0.5,
+                    y: 0.5
+                }
+            },
+            src: "imgs/content.png"
+        });
+        var searchTabWrapper = new View({
+            backgroundColor: fbBlue,
+            strokeColor: fbBlue,
+            metrics: {
+                x: 0, 
+                y: 0,
+                scalar: {
+                    width: 0.1667,
+                    height: 1
+                }
+            }
+        });
+        searchTabWrapper.addSubview(searchTab);
+
+        var moreTab = new ImageView({
+            metrics: {
+                width: 30,
+                height: 30,
+                x: -15,
+                y: -15,
+                scalar: {
+                    x: 0.5,
+                    y: 0.5
+                }
+            },
+            src: "imgs/content.png"
+        });
+        var moreTabWrapper = new View({
+            backgroundColor: fbBlue,
+            strokeColor: fbBlue,
+            metrics: {
+                x: 0, 
+                y: 0,
+                scalar: {
+                    width: 0.1667,
+                    height: 1
+                }
+            }
+        });
+        moreTabWrapper.addSubview(moreTab);
+
+        navBar.addSubview( newsfeedTabWrapper );
+        navBar.addSubview( requestsTabWrapper );
+        navBar.addSubview( messagesTabWrapper );
+        navBar.addSubview( notificationsTabWrapper );
+        navBar.addSubview( searchTabWrapper );
+        navBar.addSubview( moreTabWrapper );
         return navBar;
     }
     function getTitleBar() {
         var titleWrapper = new View({
             backgroundColor: 'white',
+            strokeColor: "#fff",
             metrics: {
                 x: 0,
                 y: 0,
+                height: 44,
                 scalar: {
-                    width: 1,
-                    height: 0.10
+                    width: 1
                 }
             }
         });
 
         titleWrapper.addSubview(new TextView({
             color: "black",
-            fontSize: 16,
+            fontSize: 15,
             decoration: "bold",
             metrics: {
                 x: 10,
-                y: 20,
+                y: -7,
                 scalar: {
+                    y: 0.5,
                     width: 1,
                     height: 1
                 }
@@ -98,29 +270,36 @@
 
             var profilePic = new ImageView({
                 metrics: {
-                    x: 6, y: 6, 
-                    width: 40, height: 40
+                    x: 6, 
+                    y: 6, 
+                    width: 40, 
+                    height: 40
                 },
+                strokeColor: "#fff",
                 src: notification.img
             });
 
             var notificationDesc = new TextView({
                 metrics: {
-                    x: 55, y: 13,
+                    x: 55, 
+                    y: -15,
                     scalar: {
+                        y: 0.5,
                         height: 1,
                         width: 1
                     }
                 },
                 text: notification.desc,
+                strokeColor: "#fff",
                 fontSize: 12
             });
             var timeDesc = new TextView({
                 metrics: {
-                    x: 75, y: -17,
+                    x: 75, 
+                    y: 5,
                     scalar: {
                         width: 1,
-                        y: 1
+                        y: 0.5
                     }
                 },
                 text: getTimeSince(notification.when),
@@ -128,8 +307,10 @@
             });
 
             var textWrapper = new View({
+                strokeColor: "#fff",
                 metrics: {
-                    x: 0, y: 0,
+                    x: 0, 
+                    y: 0,
                     scalar: {
                         height: 1,
                         width: 1
@@ -141,12 +322,15 @@
 
             var iconImg = new ImageView({
                 metrics: {
-                    x: 53, y: -21,
-                    width: 17, height: 17,
+                    x: 53, 
+                    y: 0,
+                    width: 17, 
+                    height: 17,
                     scalar: {
-                        y: 1
+                        y: 0.5
                     }
                 },
+                strokeColor: "#fff",
                 src: notification.iconImg
             });
 
