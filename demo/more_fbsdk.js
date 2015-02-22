@@ -358,19 +358,7 @@ function initPage(){
             var length = ((data.data.length > 5) ? 5 : data.data.length); //Cap section at length = 5
             //length = 1;
             for (var i = 0; i < length; i++) {
-                var panelRow = new View({
-                    metrics: {
-                        x: 0,
-                        y: 0,
-                        height: 45,
-                        scalar: {
-                            width: 1
-                        }
-                    },
-                    strokeColor: "gray"
-                })
-
-                //Get specific object at this index in this object array
+                                //Get specific object at this index in this object array
                 var currObject;
                 getEndpoint("/" + data.data[i].id, function(response){
       
@@ -379,6 +367,18 @@ function initPage(){
                         console.log("Handling response!");
                         
                         console.log(response);
+
+                        var panelRow = new View({
+                            metrics: {
+                                x: 0,
+                                y: 0,
+                                height: 45,
+                                scalar: {
+                                    width: 1
+                                }
+                            },
+                            strokeColor: "gray"
+                        })
 
                         currObject = response;
                         populatePanelRow(currObject, panelRow);
