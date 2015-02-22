@@ -801,7 +801,7 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
         lastx = x;
         lasty = y;
     });*/
-    var lastx, lasty, target;
+    var lastx, lasty, target, touching = false;
     canvas.addEventListener("click",eventPasser);
     canvas.addEventListener("touchmove",function(e){
         if (e.touches.length >= 1) {
@@ -819,6 +819,7 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
     canvas.addEventListener("touchend",dragdone);
     canvas.addEventListener("touchstart",function(e){
         if (e.touches.length == 1) {
+
             var x = e.touches[0].clientX;
             var y = e.touches[0].clientY;
             lastx = x;
@@ -827,6 +828,7 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             if (root)
                 hit = root.hitTest(x, y, "mousedrag");
 
+            touching = true;
             target = hit;
         }
     });
@@ -853,19 +855,21 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
         }
         else{
             canvas.style.cursor = "inherit";
-            if (root.hitTest(e.clientX, e.clientY, "click")){
+            if (!touching && root.hitTest(e.clientX, e.clientY, "click")) {
                 canvas.style.cursor = "pointer";
             }
+
         }
     });
     canvas.addEventListener("mouseup",dragdone);
     canvas.addEventListener("mouseout",dragdone);
     function dragdone(e){
-        if (e.touches.length == 1){
+        if (e.touches && e.touches.length == 1){
             if (root.hitTest(e.touches[0].clientX, e.touches[0].clientY, "click") == target){
                 target.click(e.touches[0]);
             }
         }
+        touching = false;
         target = false;
     }
     function eventPasser(e){
