@@ -82,57 +82,16 @@ function initPage(){
 
         var profile = getPanels(panelData.data[0]);
         var favorites = getPanels(panelData.data[1]);
-        getEndpointWrapper("/me/groups", "GROUPS")
-        // getEndpoint("/me/groups", function(response){
-        //     var groupsData, groups; 
-        //       if (response && !response.error) {
-        //         /* handle the result */
-        //         console.log("Handling response!");
-                
-        //         console.log(response);
+        
+        getEndpointWrapper("/me/groups", "GROUPS", 10);
 
-        //         group = new View({
-        //             backgroundColor: "#f7f7f7",
-        //             metrics: {
-        //                 x: 0,
-        //                 y: 0,
-        //                 height: 25,
-        //                 scalar: {
-        //                     width: 1
-        //                 }
-        //             },
-        //             strokeColor: "gray"
-        //         });
-
-        //         group.addSubview(new TextView({
-        //             metrics: {
-        //                 x: 5,
-        //                 y: 5,
-        //                 scalar: {
-        //                     height: 1,
-        //                     width: 1
-        //                 }
-        //             },
-        //             text: "GROUPS",
-        //             fontSize: 12
-        //         }))
-
-        //         contentList.addSubview(group);
-
-        //         //groups = getPanelsMod(response);
-        //         getPanelsMod(response);
-        //         /*for (var i = 0; i < groups.length; i++) {
-        //             contentList.addSubview(groups[i]);
-        //         }*/
-
-
-        //     }
-
-        // });
         var apps = getPanels(panelData.data[3])
-        var friends = getPanels(panelData.data[4])
-        var interests = getPanels(panelData.data[5])
-        var pages = getPanels(panelData.data[6])
+        //var friends = getPanels(panelData.data[4])
+        getEndpointWrapper("/me/friendlists", "FRIENDS", 2);
+        //var interests = getPanels(panelData.data[5])
+        getEndpointWrapper("/me/interests", "INTERESTS", 3);
+        //var pages = getPanels(panelData.data[6])
+        getEndpointWrapper("/me/accounts", "PAGES", 3);
         var helps = getPanels(panelData.data[7])
 
         for (var i = 0; i < profile.length; i++) {
@@ -345,7 +304,7 @@ function initPage(){
 
         content.addSubview(navBar)
 
-        function getEndpointWrapper(endpoint, clusterText){
+        function getEndpointWrapper(endpoint, clusterText, numToShow){
 
             getEndpoint(endpoint, function(response){
                     
@@ -383,7 +342,7 @@ function initPage(){
 
                     contentList.addSubview(cluster);
 
-                    getPanelsMod(response);
+                    getPanelsMod(response, numToShow);
 
 
                 }
@@ -391,14 +350,14 @@ function initPage(){
             });
         }
 
-        function getPanelsMod(data) {
+        function getPanelsMod(data, numToShow) {
             var panel = [];
 
             console.log("Inside getPanelsMod");
 
             console.log(data);
 
-            var length = ((data.data.length > 5) ? 5 : data.data.length); //Cap section at length = 5
+            var length = ((data.data.length > numToShow) ? numToShow : data.data.length); //Cap section at length = 5
             //length = 1;
             for (var i = 0; i < length; i++) {
                                 //Get specific object at this index in this object array
