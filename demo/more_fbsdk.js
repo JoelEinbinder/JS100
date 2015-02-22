@@ -357,8 +357,51 @@ function initPage(){
 
             console.log(data);
 
+            if(data.data == 'undefined'){
+                //None to draw!
+                var panelRow = new View({
+                    metrics: {
+                        x: 0,
+                        y: 0,
+                        height: 45,
+                        scalar: {
+                            width: 1
+                        }
+                    },
+                    strokeColor: "gray"
+                })
+                panelRow.addSubview(new ImageView({
+                    metrics: {
+                        x: 7.5,
+                        y: 7.5,
+                        width: 30,
+                        height: 30
+                    },
+                    src:"https://fbstatic-a.akamaihd.net/rsrc.php/v2/yg/r/U7O0a0v9zjd.png"
+                }));
+
+                panelRow.addSubview(new TextView({
+                    metrics: {
+                        x: 45,
+                        y: 15,
+                        height: 20,
+                        scalar: {
+                            width:0.5
+                        }
+                    },
+                    text: "Add New",
+                    fontSize: 16
+                }));
+
+                panel.push(panelRow);
+
+                console.log(panelRow);
+
+                contentList.addSubview(panelRow);
+            }
+
             var length = ((data.data.length > numToShow) ? numToShow : data.data.length); //Cap section at length = 5
-            //length = 1;
+            length = 1;
             for (var i = 0; i < length; i++) {
                                 //Get specific object at this index in this object array
                 var currObject;
