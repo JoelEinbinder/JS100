@@ -350,8 +350,8 @@ function initPage(){
 
             console.log(data);
 
-            var length = ((data.data.length > 5) ? 5 : data.data.length); //Cap section at length = 5
-            for (var i = 0; i < length; i++) {
+            //var length = ((data.data.length > 5) ? 5 : data.data.length); //Cap section at length = 5
+            for (var i = 0; i < 5; i++) {
                 var panelRow = new View({
                     metrics: {
                         x: 0,
