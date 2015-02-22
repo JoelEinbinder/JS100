@@ -466,39 +466,46 @@ function initPage(){
                     fontSize: 16
                 }));
 
-                /*
+                
+                //Since notification data is not available in the SDK, randomly generate.
+                var numNotifications = Math.floor((Math.random() * 100) + 30);
+                numNotifications = Math.max(0, numNotifications);
 
-                if (data.panels.notification[i]) {
-                    notif = new View({
-                        metrics: {
-                            x: -30,
-                            y: 12.5,
-                            width: 20,
-                            height: 20,
-                            scalar: {
-                                x: 1
-                            }
-                        },
-                        backgroundColor: "blue",
-                        strokeColor:"white"
-                    });
+                if(numNotifications == 0){
+                    //No notifications (70% chance)
+                    return;
+                }
 
-                    notif.addSubview(new TextView({
-                        metrics: {
-                            x: 0,
-                            y: 5,
-                            width: 20,
-                            height: 20,
-                        },
-                        text: data.panels.numNotification[i].toString(),
-                        color: "white",
-                        fontSize: 10,
-                        justify: "center"
-                    }))
 
-                    panelRow.addSubview(notif);
+                notif = new View({
+                    metrics: {
+                        x: -30,
+                        y: 12.5,
+                        width: 20,
+                        height: 20,
+                        scalar: {
+                            x: 1
+                        }
+                    },
+                    backgroundColor: "blue",
+                    strokeColor:"white"
+                });
 
-                };*/
+                notif.addSubview(new TextView({
+                    metrics: {
+                        x: 0,
+                        y: 5,
+                        width: 20,
+                        height: 20,
+                    },
+                    text: numNotifications.toString(),
+                    color: "white",
+                    fontSize: 10,
+                    justify: "center"
+                }))
+
+                panelRow.addSubview(notif);
+
 
                 
             }
