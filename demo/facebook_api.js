@@ -10,7 +10,8 @@ function statusChangeCallback(response) {
     // Logged into your app and Facebook.
     console.log("Login response object:");
     console.log(response);
-    testAPI();
+    init();
+    //testAPI();
   } else if (response.status === 'not_authorized') {
     // The person is logged into Facebook, but not your app.
     document.getElementById('status').innerHTML = 'Please log ' +
