@@ -62,6 +62,7 @@ init();
 /*****************************
  *         Helpers           *
  *****************************/
+/** Creates and returns the navigation menu **/
 function getNavBar() {
     var navBar = new ListView({
         metrics: {
@@ -336,6 +337,8 @@ function getNavBar() {
 
     return navBar;
 }
+
+/** Create and return the "Notifications" title **/
 function getTitleBar() {
     var fbBlue = "#3B5998"
     var titleWrapper = new View({
@@ -369,6 +372,7 @@ function getTitleBar() {
     return titleWrapper;
 }
 
+/** Create views populated with data. **/
 function getNotifications() {
     var data = getNotificationsData().data;
 
@@ -469,6 +473,7 @@ function getNotificationsData() {
     }
 }
 
+/** Dummy data, to be replaced with real api **/
 function getTimeSince( date ) {
     // TODO: Do better...
     var dateTokens = new Date( date ).toString().split(" ");
