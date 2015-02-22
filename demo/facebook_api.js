@@ -82,11 +82,12 @@ function testAPI() {
     console.log(response);
     document.getElementById('status').innerHTML =
       'Thanks for logging in, ' + response.name + '!';
-    
-    getNotifications();
+    setTimeout(function(){
+        getNotifications();
+
+      },0);
   });
 
-  
   
 }
 
@@ -109,7 +110,6 @@ function addPermissions() {
 
 function getNotifications() {
   console.log("Running get notifications");
-  console.log(FB.getAccessToken());
 
   FB.api(
     "/me/notifications",
