@@ -10,7 +10,7 @@ function statusChangeCallback(response) {
     // Logged into your app and Facebook.
     console.log("Login response object:");
     console.log(response);
-    init();
+    initPage();
     //testAPI();
   } else if (response.status === 'not_authorized') {
     // The person is logged into Facebook, but not your app.
@@ -139,11 +139,12 @@ function getEndpoint(endpoint) {
   FB.api(
     endpoint,
     function (response) {
-      console.log(response);
+      
       if (response && !response.error) {
         /* handle the result */
         console.log("Handling response!");
         
+        console.log(response);
 
         /*
         for(datum in response.data){
