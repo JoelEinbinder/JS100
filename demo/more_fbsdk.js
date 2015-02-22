@@ -92,7 +92,7 @@ function initPage(){
                 console.log(response);
 
                 //groupsData = response;
-                groups = getPanelsMod(response);
+                
 
                 group = new View({
                     backgroundColor: "#f7f7f7",
@@ -120,12 +120,13 @@ function initPage(){
                     fontSize: 12
                 }))
 
-
                 contentList.addSubview(group);
 
-                for (var i = 0; i < groups.length; i++) {
+                groups = getPanelsMod(response);
+
+                /*for (var i = 0; i < groups.length; i++) {
                     contentList.addSubview(groups[i]);
-                }
+                }*/
 
 
             }
@@ -387,6 +388,8 @@ function initPage(){
                 panel.push(panelRow);
 
             }
+
+            contentList.addSubview(panel);
 
             return panel;
 
