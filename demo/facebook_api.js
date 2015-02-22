@@ -139,6 +139,6 @@ function getEndpoint(endpoint, cb) {
   FB.api(
     endpoint,
       cb
-    }
+    
   );
 }
