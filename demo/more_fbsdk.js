@@ -385,8 +385,8 @@ function initPage(){
 
                         panel.push(panelRow);
 
-                        console.print(panelRow);
-                        
+                        console.log(panelRow);
+
                         contentList.addSubview(panelRow);
 
                       }
