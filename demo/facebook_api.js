@@ -120,7 +120,7 @@ function getNotifications() {
 
         for(notification in response){
           console.log("\nNew notification:");
-          console.log(notification);
+          console.log(notification.data);
         }
       }
     }
