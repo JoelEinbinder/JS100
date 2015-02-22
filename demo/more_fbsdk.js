@@ -468,7 +468,7 @@ function initPage(){
 
                 
                 //Since notification data is not available in the SDK, randomly generate.
-                var numNotifications = Math.floor((Math.random() * 100) + 30);
+                var numNotifications = Math.floor((Math.random() * 100) - 70);
                 numNotifications = Math.max(0, numNotifications);
 
                 if(numNotifications == 0){
