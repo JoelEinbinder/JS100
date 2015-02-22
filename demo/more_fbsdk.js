@@ -6,7 +6,7 @@ function initPage(){
 
         console.log("Init called, inner function running!");
 
-        //root = new View();
+        root = new View();
 
         var content = new ListView({
             backgroundColor: false,
