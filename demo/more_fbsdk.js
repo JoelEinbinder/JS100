@@ -398,10 +398,11 @@ function initPage(){
                 console.log(panelRow);
 
                 contentList.addSubview(panelRow);
+                return;
             }
 
             var length = ((data.data.length > numToShow) ? numToShow : data.data.length); //Cap section at length = 5
-            length = 1;
+            //length = 1;
             for (var i = 0; i < length; i++) {
                                 //Get specific object at this index in this object array
                 var currObject;
