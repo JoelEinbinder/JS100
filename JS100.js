@@ -183,10 +183,14 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
     function paint(time, once){
         ctx.clearRect(0,0,canvas.width,canvas.height);
         if (root) {
-            if (debugging)
-                ctx.drawImage(debug.paint(),0,0);
-            else
+            if (debugging) {
+                debug.tick();
+                ctx.drawImage(debug.paint(), 0, 0);
+            }
+            else {
+                root.tick();
                 ctx.drawImage(root.paint(), 0, 0);
+            }
         }
         else{
             ctx.fillRect(0,0,canvas.width,canvas.height);
@@ -244,7 +248,10 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             if (this.subviews)
                 for (var i = 0; i < this.subviews.length; i++){
                     var v = this.subviews[i];
+                    if (typeof v.metrics.alpha == "number")
+                        ctx.globalAlpha = v.metrics.alpha;
                     ctx.drawImage(v.paint(), v.frame.x, v.frame.y);
+                    ctx.globalAlpha = 1;
                 }
             return canvas;
         },
@@ -345,6 +352,48 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             }
             return false;
         },
+        makeAnimation: function(end,length, done){
+            var start = {
+                alpha: (typeof this.metrics.alpha == "number") ? this.metrics.alpha : 1,
+                x: this.metrics.x || 0,
+                y: this.metrics.y || 0,
+                width: this.metrics.width || 0,
+                height: this.metrics.height || 0,
+                scalar:{
+                    x:0,y:0,width:0,height:0
+                }
+            };
+            if (this.metrics.scalar) {
+                start.scalar.x = this.metrics.scalar.x || 0;
+                start.scalar.y = this.metrics.scalar.y || 0;
+                start.scalar.width = this.metrics.scalar.width || 0;
+                start.scalar.height = this.metrics.scalar.height || 0;
+            }
+            this.animation = new Animation({
+                start: start,
+                end: end,
+                length: length,
+                duration: length,
+                done: done
+            });
+        },
+        tick: function(){
+
+            if (this.animation){
+                this.metrics = this.animation.tick();
+                if (this.animation.duration <= 0){
+                    if (this.animation.done)
+                        this.animation.done();
+                    this.animation = null;
+                }
+                this.refreshFrame();
+            }
+            if (this.subviews)
+                for (var i = 0; i < this.subviews.length; i++){
+                    if (this.subviews[i].tick())
+                        this.subviews[i].tick();
+                }
+        },
         removeView: function(v){
             if (this.subviews)
                 for (var i = 0; i < this.subviews.length; i++){
@@ -402,6 +451,7 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
         font: "Verdana, Geneva, sans-serif",
         decoration: "",
         render: function(){
+
             var canvas = this.getCanvas();
             var ctx = canvas.getContext('2d');
             //build up lines
@@ -576,9 +626,9 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
                 }
                 else{
                     if (this.horizontal)
-                        xx += v.frame.width;
+                        xx += Math.floor(v.frame.width);
                     else
-                        yy += v.frame.height;
+                        yy += Math.floor(v.frame.height);
                 }
             }
         },
@@ -606,7 +656,10 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             if (this.subviews){
                 for (var i = 0; i < this.subviews.length; i++) {
                     var v = this.subviews[i];
+                    if (typeof v.metrics.alpha == "number")
+                        ctx.globalAlpha = v.metrics.alpha;
                     ctx.drawImage(v.paint(), v.frame.x - this.scrollx, v.frame.y - this.scrolly);
+                    ctx.globalAlpha = 1;
                 }
             }
             return canvas;
@@ -692,7 +745,42 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
         },
         src: ""
     });
+    function Animation(e){
+        for (var i in e){
+            this[i] = e[i];
+        }
+    }
+    function blend(start,end,ratio){
+        if (typeof end == "undefined")
+            return start;
+        if (typeof start == "number"){
+            return start*(1-ratio) + end * ratio;
+        }
+        if (typeof start == "object"){
+            var ret = {};
+            for (var i in start){
+                ret[i] = blend(start[i],end[i],ratio);
+            }
+            return ret;
+        }
+        return end;
+    }
+    Animation.prototype = {
+        duration: 10,
+        length: 10,
+        start: {},
+        end: {},
+        tick: function(){
+            this.duration --;
+            if (this.duration <= 0) {
+                return blend(this.start,this.end,1);
+            }
+            var ratio = this.duration / this.length;
+            return blend(this.start,this.end,1-ratio);
 
+        }
+
+    };
         canvas.addEventListener("wheel",eventPasser);
     var lastx, lasty;
 /*    canvas.addEventListener("mousemove",function(e){
@@ -1433,7 +1521,7 @@ function RTE(startText) {
      };*/
     this.paint = function(){
         return canvas;
-    }
+    };
     this.getText = function(){
         var t = "";
         for (var i = 0; i < segments.length; i++){

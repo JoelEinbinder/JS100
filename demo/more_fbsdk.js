@@ -82,8 +82,55 @@ function initPage(){
 
         var profile = getPanels(panelData.data[0]);
         var favorites = getPanels(panelData.data[1]);
-        var groupsData = getEndpoint("/me/groups");
-        var groups = setTimeout(function(){getPanelsMod(groupsData)}, 5000);
+        var groupsData, groups; 
+        getEndpoint("/me/groups", function(response){
+      
+              if (response && !response.error) {
+                /* handle the result */
+                console.log("Handling response!");
+                
+                console.log(response);
+
+                //groupsData = response;
+                groups = getPanelsMod(response);
+
+                group = new View({
+                    backgroundColor: "#f7f7f7",
+                    metrics: {
+                        x: 0,
+                        y: 0,
+                        height: 25,
+                        scalar: {
+                            width: 1
+                        }
+                    },
+                    strokeColor: "gray"
+                });
+
+                group.addSubview(new TextView({
+                    metrics: {
+                        x: 5,
+                        y: 5,
+                        scalar: {
+                            height: 1,
+                            width: 1
+                        }
+                    },
+                    text: "GROUPS",
+                    fontSize: 12
+                }))
+
+
+                contentList.addSubview(group);
+
+                for (var i = 0; i < groups.length; i++) {
+                    contentList.addSubview(groups[i]);
+                }
+
+
+            }
+
+        });
         var apps = getPanels(panelData.data[3])
         var friends = getPanels(panelData.data[4])
         var interests = getPanels(panelData.data[5])
@@ -127,38 +174,7 @@ function initPage(){
             contentList.addSubview(favorites[i]);
         }
 
-        group = new View({
-            backgroundColor: "#f7f7f7",
-            metrics: {
-                x: 0,
-                y: 0,
-                height: 25,
-                scalar: {
-                    width: 1
-                }
-            },
-            strokeColor: "gray"
-        });
-
-        group.addSubview(new TextView({
-            metrics: {
-                x: 5,
-                y: 5,
-                scalar: {
-                    height: 1,
-                    width: 1
-                }
-            },
-            text: "GROUPS",
-            fontSize: 12
-        }))
-
-
-        contentList.addSubview(group);
-
-        for (var i = 0; i < groups.length; i++) {
-            contentList.addSubview(groups[i]);
-        }
+        
 
         app = new View({
             backgroundColor: "#f7f7f7",
@@ -338,8 +354,8 @@ function initPage(){
 
             console.log(data);
 
-            var length = ((data.data.length > 5) ? 5 : data.data.length); //Cap section at length = 5
-            for (var i = 0; i < length; i++) {
+            //var length = ((data.data.length > 5) ? 5 : data.data.length); //Cap section at length = 5
+            for (var i = 0; i < 5; i++) {
                 var panelRow = new View({
                     metrics: {
                         x: 0,
@@ -353,67 +369,20 @@ function initPage(){
                 })
 
                 //Get specific object at this index in this object array
-                var currObject = getEndpoint("/" + data.data[i].id);
+                var currObject;
+                getEndpoint("/" + data.data[i].id, function(response){
+      
+                      if (response && !response.error) {
+                        /* handle the result */
+                        console.log("Handling response!");
+                        
+                        console.log(response);
 
-                console.log("Curr object:");
-                console.log(currObject);
+                        currObject = response;
+                        populatePanelRow(currObject, panelRow);
+                      }
 
-                panelRow.addSubview(new ImageView({
-                    metrics: {
-                        x: 7.5,
-                        y: 7.5,
-                        width: 30,
-                        height: 30
-                    },
-                    src:currObject.icon
-                }));
-
-                panelRow.addSubview(new TextView({
-                    metrics: {
-                        x: 45,
-                        y: 15,
-                        height: 20,
-                        scalar: {
-                            width:0.5
-                        }
-                    },
-                    text: currObject.name,
-                    fontSize: 16
-                }));
-
-                /*
-
-                if (data.panels.notification[i]) {
-                    notif = new View({
-                        metrics: {
-                            x: -30,
-                            y: 12.5,
-                            width: 20,
-                            height: 20,
-                            scalar: {
-                                x: 1
-                            }
-                        },
-                        backgroundColor: "blue",
-                        strokeColor:"white"
-                    });
-
-                    notif.addSubview(new TextView({
-                        metrics: {
-                            x: 0,
-                            y: 5,
-                            width: 20,
-                            height: 20,
-                        },
-                        text: data.panels.numNotification[i].toString(),
-                        color: "white",
-                        fontSize: 10,
-                        justify: "center"
-                    }))
-
-                    panelRow.addSubview(notif);
-
-                };*/
+                });
 
                 panel.push(panelRow);
 
@@ -885,4 +854,63 @@ function initPage(){
     })();
 
     return root;
+}
+
+function populatePanelRow(currObject, panelRow){
+    panelRow.addSubview(new ImageView({
+                    metrics: {
+                        x: 7.5,
+                        y: 7.5,
+                        width: 30,
+                        height: 30
+                    },
+                    src:currObject.icon
+                }));
+
+                panelRow.addSubview(new TextView({
+                    metrics: {
+                        x: 45,
+                        y: 15,
+                        height: 20,
+                        scalar: {
+                            width:0.5
+                        }
+                    },
+                    text: currObject.name,
+                    fontSize: 16
+                }));
+
+                /*
+
+                if (data.panels.notification[i]) {
+                    notif = new View({
+                        metrics: {
+                            x: -30,
+                            y: 12.5,
+                            width: 20,
+                            height: 20,
+                            scalar: {
+                                x: 1
+                            }
+                        },
+                        backgroundColor: "blue",
+                        strokeColor:"white"
+                    });
+
+                    notif.addSubview(new TextView({
+                        metrics: {
+                            x: 0,
+                            y: 5,
+                            width: 20,
+                            height: 20,
+                        },
+                        text: data.panels.numNotification[i].toString(),
+                        color: "white",
+                        fontSize: 10,
+                        justify: "center"
+                    }))
+
+                    panelRow.addSubview(notif);
+
+                };*/
 }
