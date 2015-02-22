@@ -1,7 +1,11 @@
 var root;
 function initPage(){
     console.log("Init called!");
+
     (function () {
+
+        console.log("Init called, inner function running!");
+
         root = new View();
 
         var content = new ListView({
@@ -328,6 +332,11 @@ function initPage(){
 
         function getPanelsMod(data) {
             var panel = [];
+
+            console.log("Inside getPanelsMod");
+
+            console.log(data);
+
             var length = ((data.data.length > 5) ? 5 : data.data.length); //Cap section at length = 5
             for (var i = 0; i < length; i++) {
                 var panelRow = new View({
@@ -344,6 +353,9 @@ function initPage(){
 
                 //Get specific object at this index in this object array
                 var currObject = getEndpoint("/" + data.data[i].id);
+
+                console.log("Curr object:");
+                console.log(currObject);
 
                 panelRow.addSubview(new ImageView({
                     metrics: {
