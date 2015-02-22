@@ -123,10 +123,10 @@ function initPage(){
                 contentList.addSubview(group);
 
                 //groups = getPanelsMod(response);
-                groups = getPanelsMod(response);
-                for (var i = 0; i < groups.length; i++) {
+                getPanelsMod(response);
+                /*for (var i = 0; i < groups.length; i++) {
                     contentList.addSubview(groups[i]);
-                }
+                }*/
 
 
             }
@@ -384,7 +384,10 @@ function initPage(){
                         populatePanelRow(currObject, panelRow);
 
                         panel.push(panelRow);
+
+                        console.print(panelRow);
                         
+                        contentList.addSubview(panelRow);
 
                       }
 
@@ -452,8 +455,6 @@ function initPage(){
 
                 
             }
-
-            return panel;
 
         }
 
