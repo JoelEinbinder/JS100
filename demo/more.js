@@ -1,6 +1,20 @@
 (function () {
     root = new View();
 
+    var content = new ListView({
+        backgroundColor: false,
+        metrics: {
+            x: 0,
+            y: 0,
+            scalar: {
+                width: 1,
+                height: 1
+            }
+        },
+        strokeColor: "white"
+    })
+    root.addSubview(content);
+
     var title = new View({
         backgroundColor: "#3b5998",
         metrics: {
@@ -12,7 +26,9 @@
             }
         }
     });
-    root.addSubview(title);
+
+
+    content.addSubview(title);
 
     title.addSubview(new TextView({
         metrics: {
@@ -25,24 +41,23 @@
         },
         justify: "center",
         color: "white",
-        font:"Verdana",
+        font: "Verdana",
         text: "More",
         fontSize: 20
     }));
 
-    var content = new View({
-        backgroundColor: false,
+
+    var contentScroll = new ScrollView({
         metrics: {
             x: 0,
-            y: 45,
+            y: 0,
+            height:-90.5,
             scalar: {
                 width: 1,
-                height: 0.9
+                height:1
             }
-        },
-        strokeColor: "white"
+        }
     })
-    root.addSubview(content);
 
     var contentList = new ListView({
         metrics: {
@@ -53,6 +68,7 @@
                 height: 1
             }
         },
+        resizesToContent: true
     })
 
     var panelData = getPanelData();
@@ -297,7 +313,15 @@
         contentList.addSubview(helps[i]);
     }
 
-    content.addSubview(contentList);
+
+
+    contentScroll.addSubview(contentList);
+
+    content.addSubview(contentScroll);
+
+    navBar = getNavBar();
+
+    content.addSubview(navBar)
 
     function getPanels(data) {
         var panel = [];
@@ -388,58 +412,83 @@
                     }
                 },
                 {
-                    "numPanels": 3,
+                    "numPanels": 6,
                     "panels": {
-                        "img": ["http://upload.wikimedia.org/wikipedia/en/2/28/Deep_Fried_Man_portrait_-_real_name_Daniel_Friedman_-_South_African_Comedian.jpg",
-                            "http://www.polyvore.com/cgi/img-thing?.out=jpg&size=l&tid=33839070",
-                            "https://cdn2.iconfinder.com/data/icons/metro-uinvert-dock/256/Live_Messenger_alt_3.png"],
-                        "name": ["Friends","Plus","Messanges"],
-                        "notification": [true, false, true],
-                        "numNotification": [45, 0, 10]
+                        "img": ["https://fbstatic-a.akamaihd.net/rsrc.php/v2/yv/r/jyffrynor-r.png",
+                            "https://fbstatic-a.akamaihd.net/rsrc.php/v2/yl/r/EWikQjWTnCU.png",
+                            "https://fbstatic-a.akamaihd.net/rsrc.php/v2/yW/r/JCxxvoWIjHH.png",
+                            "https://fbstatic-a.akamaihd.net/rsrc.php/v2/y7/r/c0e7heXyaJf.png",
+                            "https://fbstatic-a.akamaihd.net/rsrc.php/v2/yW/r/h0535rxX9Ra.png",
+                            "https://fbstatic-a.akamaihd.net/rsrc.php/v2/y1/r/4fPfowVQKZx.png"],
+                        "name": ["Most Recent",
+                            "Messages",
+                            "Events",
+                            "Trending",
+                            "Saved",
+                            "Friends"],
+                        "notification": [false, false, true, false, true, false],
+                        "numNotification": [0,0,4,0,1,0]
                     }
                 },
                 {
-                    "numPanels": 1,
+                    "numPanels": 3,
                     "panels": {
-                        "img": ["https://cdn2.iconfinder.com/data/icons/windows-8-metro-style/512/rocket.png"],
-                        "name": ["Rocketry Club"],
-                        "notification": [true],
-                        "numNotification":[5]
+                        "img": ["https://fbstatic-a.akamaihd.net/rsrc.php/v2/yt/r/Jhq-dLlKWE-.png",
+                            "https://fbstatic-a.akamaihd.net/rsrc.php/v2/ym/r/RdJc45fSEaP.png",
+                            ""],
+                        "name": ["Find New Groups",
+                            "Manage Your Groups",
+                            "See All Groups"],
+                        "notification": [false, false, false],
+                        "numNotification":[0,0,0]
+                    }
+                },
+                {
+                    "numPanels": 7,
+                    "panels": {
+                        "img": ["https://fbstatic-a.akamaihd.net/rsrc.php/v2/yq/r/tfDkn9HtxpD.png",
+                            "https://fbstatic-a.akamaihd.net/rsrc.php/v2/yv/r/VaknOwrbnBC.png",
+                            "https://fbstatic-a.akamaihd.net/rsrc.php/v2/y4/r/cXQju6jBBej.png",
+                            "https://fbstatic-a.akamaihd.net/rsrc.php/v2/yo/r/Y7Se8klx7r-.png",
+                            "https://fbstatic-a.akamaihd.net/rsrc.php/v2/yq/r/l-j0CzSoSie.png",
+                            "https://fbstatic-a.akamaihd.net/rsrc.php/v2/yN/r/Zd_M67spfjw.png",
+                            ""],
+                        "name": ["Find Friends",
+                            "Photos",
+                            "Notes",
+                            "Suggest Edits",
+                            "Pokes",
+                            "Games",
+                            "See All Apps"],
+                        "notification": [false,false,false,false,false,false,false],
+                        "numNotification":[0,0,0,0,0,0,0]
                     }
                 },
                 {
                     "numPanels": 2,
                     "panels": {
-                        "img": ["https://cdn2.iconfinder.com/data/icons/facebook-svg-icons-1/64/all_friends-512.png",
-                            "http://img3.wikia.nocookie.net/__cb20090227194712/java/images/0/0e/Camera_icon.gif"],
-                        "name":["Find Friends","Photos"],
-                        "notification": [false,false],
-                        "numNotification":[0,0]
+                        "img": ["https://fbstatic-a.akamaihd.net/rsrc.php/v2/yP/r/IKDNTh8bnOI.png",
+                            "https://fbstatic-a.akamaihd.net/rsrc.php/v2/yg/r/N2djgm7e2yt.png"],
+                        "name": ["Close Friends",
+                            "Family"],
+                        "notification": [false,true],
+                        "numNotification":[0,20]
                     }
                 },
                 {
                     "numPanels": 1,
                     "panels": {
-                        "img": ["http://www.sagegardencare.org/wp-content/uploads/2013/10/14-friend-icon.jpg"],
-                        "name": ["Close Friends"],
-                        "notification": [false],
-                        "numNotification":[0]
-                    }
-                },
-                {
-                    "numPanels": 1,
-                    "panels": {
-                        "img": ["http://static.wixstatic.com/media/3d232a_43e8108f5f7b4e4fb407729dda897f32.png"],
+                        "img": ["https://fbstatic-a.akamaihd.net/rsrc.php/v2/yP/r/6t-lH5klGf1.png"],
                         "name": ["Pages and Public Figures"],
                         "notification": [true],
-                        "numNotification":[15]
+                        "numNotification":[7]
                     }
                 },
                 {
                     "numPanels": 1,
                     "panels": {
-                        "img": ["http://thesocialskinny.com/wp-content/uploads/2011/04/pages-icon.png"],
-                        "name": ["Create New Page"],
+                        "img": [""],
+                        "name": ["See All Pages"],
                         "notification": [false],
                         "numNotification":[0]
                     }
@@ -457,4 +506,280 @@
             ]
         }
     }
+    function getNavBar() {
+        var navBar = new ListView({
+            metrics: {
+                x: 0,
+                y: -45.5,
+                height: 45.5,
+                scalar: {
+                    y: 1,
+                    width: 1
+                }
+            },
+            horizontal: true
+        });
+
+        var fbBlue = "#3B5998"
+        var darkBlue = "#243c6d"
+
+        var focus = "notifications";
+        var focusImg = notificationsTab;
+        var focusWrapper = notificationsTabWrapper;
+
+        // Tab 1 - Newsfeed
+        var newsfeedTab = new ImageView({
+            metrics: {
+                width: 20,
+                height: 20,
+                x: -10,
+                y: -10,
+                scalar: {
+                    x: 0.5,
+                    y: 0.5
+                }
+            },
+            src: "imgs/newsfeed.png"
+        });
+        var newsfeedTabWrapper = new View({
+            backgroundColor: fbBlue,
+            strokeColor: fbBlue,
+            metrics: {
+                x: 0,
+                y: 0,
+                scalar: {
+                    width: 0.1667,
+                    height: 1
+                }
+            },
+            click: function (e) {
+                if (focusImg) {
+                    focusImg.setSrc(deselect(focus));
+                    focusWrapper.backgroundColor = fbBlue
+                }
+                focus = "newsfeed";
+                focusImg = newsfeedTab;
+                focusWrapper = newsfeedTabWrapper;
+                focusWrapper.backgroundColor = darkBlue;
+                focusImg.setSrc("imgs/newsfeed_selected.png");
+            }
+        });
+        newsfeedTabWrapper.addSubview(newsfeedTab);
+
+        var requestsTab = new ImageView({
+            metrics: {
+                width: 20,
+                height: 20,
+                x: -10,
+                y: -10,
+                scalar: {
+                    x: 0.5,
+                    y: 0.5
+                }
+            },
+            src: "imgs/friend_requests.png"
+        });
+        var requestsTabWrapper = new View({
+            backgroundColor: fbBlue,
+            strokeColor: fbBlue,
+            metrics: {
+                x: 0,
+                y: 0,
+                scalar: {
+                    width: 0.1667,
+                    height: 1
+                }
+            },
+            click: function (e) {
+                if (focusImg) {
+                    focusImg.setSrc(deselect(focus));
+                    focusWrapper.backgroundColor = fbBlue;
+                }
+                focus = "requests";
+                focusImg = requestsTab;
+                focusWrapper = requestsTabWrapper;
+                focusWrapper.backgroundColor = darkBlue;
+                focusImg.setSrc("imgs/friend_requests_selected.png");
+            }
+        });
+        requestsTabWrapper.addSubview(requestsTab);
+
+        var messagesTab = new ImageView({
+            metrics: {
+                width: 20,
+                height: 20,
+                x: -10,
+                y: -10,
+                scalar: {
+                    x: 0.5,
+                    y: 0.5
+                }
+            },
+            src: "imgs/messenger.png"
+        });
+        var messagesTabWrapper = new View({
+            backgroundColor: fbBlue,
+            strokeColor: fbBlue,
+            metrics: {
+                x: 0,
+                y: 0,
+                scalar: {
+                    width: 0.1667,
+                    height: 1
+                }
+            },
+            click: function (e) {
+                if (focusImg) {
+                    focusImg.setSrc(deselect(focus));
+                    focusWrapper.backgroundColor = fbBlue;
+                }
+                focus = "messages";
+                focusImg = messagesTab;
+                focusWrapper = messagesTabWrapper;
+                focusWrapper.backgroundColor = darkBlue;
+                focusImg.setSrc("imgs/messenger_selected.png");
+            }
+        });
+        messagesTabWrapper.addSubview(messagesTab);
+
+        var notificationsTab = new ImageView({
+            metrics: {
+                width: 20,
+                height: 20,
+                x: -10,
+                y: -10,
+                scalar: {
+                    x: 0.5,
+                    y: 0.5
+                }
+            },
+            src: "imgs/notifications.png"
+        });
+        var notificationsTabWrapper = new View({
+            backgroundColor: fbBlue,
+            strokeColor: fbBlue,
+            metrics: {
+                x: 0,
+                y: 0,
+                scalar: {
+                    width: 0.1667,
+                    height: 1
+                }
+            },
+            click: function (e) {
+                if (focusImg) {
+                    focusImg.setSrc(deselect(focus));
+                    focusWrapper.backgroundColor = fbBlue;
+                }
+                focus = "notifications";
+                focusImg = notificationsTab;
+                focusWrapper = notificationsTabWrapper;
+                focusWrapper.backgroundColor = darkBlue;
+                focusImg.setSrc("imgs/notifications_selected.png");
+            }
+        });
+        notificationsTabWrapper.addSubview(notificationsTab);
+
+        var searchTab = new ImageView({
+            metrics: {
+                width: 20,
+                height: 20,
+                x: -10,
+                y: -10,
+                scalar: {
+                    x: 0.5,
+                    y: 0.5
+                }
+            },
+            src: "imgs/search.png"
+        });
+        var searchTabWrapper = new View({
+            backgroundColor: fbBlue,
+            strokeColor: fbBlue,
+            metrics: {
+                x: 0,
+                y: 0,
+                scalar: {
+                    width: 0.1667,
+                    height: 1
+                }
+            },
+            click: function (e) {
+                if (focusImg) {
+                    focusImg.setSrc(deselect(focus));
+                    focusWrapper.backgroundColor = fbBlue;
+                }
+                focus = "search";
+                focusImg = searchTab;
+                focusWrapper = searchTabWrapper;
+                focusWrapper.backgroundColor = darkBlue;
+                focusImg.setSrc("imgs/search_selected.png");
+            }
+        });
+        searchTabWrapper.addSubview(searchTab);
+
+        var moreTab = new ImageView({
+            metrics: {
+                width: 20,
+                height: 20,
+                x: -10,
+                y: -10,
+                scalar: {
+                    x: 0.5,
+                    y: 0.5
+                }
+            },
+            src: "imgs/more.png"
+        });
+        var moreTabWrapper = new View({
+            backgroundColor: fbBlue,
+            strokeColor: fbBlue,
+            metrics: {
+                x: 0,
+                y: 0,
+                scalar: {
+                    width: 0.1667,
+                    height: 1
+                }
+            },
+            click: function (e) {
+                if (focusImg) {
+                    focusImg.setSrc(deselect(focus));
+                    focusWrapper.backgroundColor = fbBlue;
+                }
+                focus = "more";
+                focusImg = moreTab;
+                focusWrapper = moreTabWrapper;
+                focusWrapper.backgroundColor = darkBlue;
+                focusImg.setSrc("imgs/more_selected.png");
+            }
+        });
+        moreTabWrapper.addSubview(moreTab);
+
+        navBar.addSubview(newsfeedTabWrapper);
+        navBar.addSubview(requestsTabWrapper);
+        navBar.addSubview(messagesTabWrapper);
+        navBar.addSubview(notificationsTabWrapper);
+        navBar.addSubview(searchTabWrapper);
+        navBar.addSubview(moreTabWrapper);
+
+        return navBar;
+    }
+
+    function deselect(focus) {
+        if (focus == "newsfeed") {
+            return "imgs/newsfeed.png"
+        } else if (focus == "requests") {
+            return "imgs/friend_requests.png"
+        } else if (focus == "messages") {
+            return "imgs/messenger.png"
+        } else if (focus == "notifications") {
+            return "imgs/notifications.png"
+        } else if (focus == "search") {
+            return "imgs/search.png"
+        } else if (focus == "more") {
+            return "imgs/more.png"
+        }
+    }
+
 })();
