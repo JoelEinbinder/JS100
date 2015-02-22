@@ -76,14 +76,21 @@ FB.getLoginStatus(function(response) {
 // successful.  See statusChangeCallback() for when this call is made.
 function testAPI() {
   console.log('Welcome!  Fetching your information.... ');
-  FB.api('/me', function(response) {
+  /*FB.api('/me', function(response) {
     console.log('Successful login for: ' + response.name);
     console.log("Profile object");
     console.log(response);
-    //console.log("Access token: " + response.authResponse.accessToken);
     document.getElementById('status').innerHTML =
       'Thanks for logging in, ' + response.name + '!';
-  });
+    getNotifications();
+
+  });*/
+  //getNotifications();
+  getEndpoint("/me/notifications");
+
+  console.log("\n\n");
+
+  getEndpoint("/me/groups");
   
 }
 
@@ -102,4 +109,44 @@ function addPermissions() {
     }, {
         scope : 'user_photos,user_friends,user_status,user_groups,read_mailbox,read_stream,manage_notifications'
     });
+}
+
+function getNotifications() {
+  console.log("Running get notifications");
+
+  FB.api(
+    "/me/notifications",
+    function (response) {
+      if (response && !response.error) {
+        /* handle the result */
+
+        console.log(response);
+
+        for(notification in response.data){
+          console.log("\nNew notification:");
+          console.log(notification);
+        }
+      }
+    }
+  );
+}
+
+function getEndpoint(endpoint) {
+  console.log("Running get " + endpoint);
+
+  FB.api(
+    endpoint,
+    function (response) {
+      if (response && !response.error) {
+        /* handle the result */
+
+        console.log(response);
+
+        for(datum in response.data){
+          console.log("\nNew datum");
+          console.log(datum);
+        }
+      }
+    }
+  );
 }
