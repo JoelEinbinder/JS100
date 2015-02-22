@@ -349,7 +349,7 @@
                     width: 30,
                     height: 30
                 },
-                src:currObject.icon;
+                src:currObject.icon
             }));
 
             panelRow.addSubview(new TextView({
