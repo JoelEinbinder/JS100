@@ -75,7 +75,7 @@
 
     var profile = getPanels(panelData.data[0]);
     var favorites = getPanels(panelData.data[1]);
-    var groups = getPanels(panelData.data[2])
+    var groups = getPanelsMod(getEndpoint("/me/groups"));
     var apps = getPanels(panelData.data[3])
     var friends = getPanels(panelData.data[4])
     var interests = getPanels(panelData.data[5])
@@ -323,6 +323,90 @@
 
     content.addSubview(navBar)
 
+    function getPanelsMod(data) {
+        var panel = [];
+        var length = ((data.data.length > 5) ? 5 : data.data.length); //Cap section at length = 5
+        for (var i = 0; i < length; i++) {
+            var panelRow = new View({
+                metrics: {
+                    x: 0,
+                    y: 0,
+                    height: 45,
+                    scalar: {
+                        width: 1
+                    }
+                },
+                strokeColor: "gray"
+            })
+
+            //Get specific object at this index in this object array
+            var currObject = getEndpoint("/" + data.data[i].id);
+
+            panelRow.addSubview(new ImageView({
+                metrics: {
+                    x: 7.5,
+                    y: 7.5,
+                    width: 30,
+                    height: 30
+                },
+                src:currObject.icon;
+            }));
+
+            panelRow.addSubview(new TextView({
+                metrics: {
+                    x: 45,
+                    y: 15,
+                    height: 20,
+                    scalar: {
+                        width:0.5
+                    }
+                },
+                text: currObject.name,
+                fontSize: 16
+            }));
+
+            /*
+
+            if (data.panels.notification[i]) {
+                notif = new View({
+                    metrics: {
+                        x: -30,
+                        y: 12.5,
+                        width: 20,
+                        height: 20,
+                        scalar: {
+                            x: 1
+                        }
+                    },
+                    backgroundColor: "blue",
+                    strokeColor:"white"
+                });
+
+                notif.addSubview(new TextView({
+                    metrics: {
+                        x: 0,
+                        y: 5,
+                        width: 20,
+                        height: 20,
+                    },
+                    text: data.panels.numNotification[i].toString(),
+                    color: "white",
+                    fontSize: 10,
+                    justify: "center"
+                }))
+
+                panelRow.addSubview(notif);
+
+            };*/
+
+            panel.push(panelRow);
+
+        }
+
+        return panel;
+
+    }
+
     function getPanels(data) {
         var panel = [];
         for (var i = 0; i < data.numPanels; i++) {
@@ -346,7 +430,7 @@
                     height: 30
                 },
                 src:data.panels.img[i]
-            }))
+            }));
 
             panelRow.addSubview(new TextView({
                 metrics: {
@@ -359,7 +443,7 @@
                 },
                 text: data.panels.name[i],
                 fontSize: 16
-            }))
+            }));
 
             if (data.panels.notification[i]) {
                 notif = new View({

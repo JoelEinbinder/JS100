@@ -132,6 +132,7 @@ function getNotifications() {
 }
 
 function getEndpoint(endpoint) {
+  console.log("~~~~~~~~~~~~~~~~~~~~");
   console.log("Running get " + endpoint);
 
   FB.api(
@@ -142,10 +143,13 @@ function getEndpoint(endpoint) {
 
         console.log(response);
 
+        /*
         for(datum in response.data){
           console.log("\nNew datum");
           console.log(datum);
-        }
+        }*/
+
+        return response;
       }
     }
   );
