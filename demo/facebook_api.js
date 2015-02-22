@@ -10,7 +10,8 @@ function statusChangeCallback(response) {
     // Logged into your app and Facebook.
     console.log("Login response object:");
     console.log(response);
-    testAPI();
+    init();
+    //testAPI();
   } else if (response.status === 'not_authorized') {
     // The person is logged into Facebook, but not your app.
     document.getElementById('status').innerHTML = 'Please log ' +
@@ -132,20 +133,25 @@ function getNotifications() {
 }
 
 function getEndpoint(endpoint) {
+  console.log("~~~~~~~~~~~~~~~~~~~~");
   console.log("Running get " + endpoint);
 
   FB.api(
     endpoint,
     function (response) {
+      console.log(response);
       if (response && !response.error) {
         /* handle the result */
+        console.log("Handling response!");
+        
 
-        console.log(response);
-
+        /*
         for(datum in response.data){
           console.log("\nNew datum");
           console.log(datum);
-        }
+        }*/
+
+        return response;
       }
     }
   );

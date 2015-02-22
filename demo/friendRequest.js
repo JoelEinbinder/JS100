@@ -18,17 +18,32 @@
         metrics: {
             x: 0,
             y: 12.5,
-            height: 20,
             scalar: {
-                width: 1
+                width: 1,
+                height: 1
             }
         },
         justify: "center",
         color: "white",
         font:"Verdana",
-        text: "Friend Request",
+        text: "Friend Requests",
         fontSize: 20
     }));
+
+
+    title.addSubview(new ImageView({
+        metrics: {
+            x: -30,
+            y: 12.5,
+            height: 20,
+            width: 20,
+
+            scalar: {
+                x: 1
+            }
+        },
+        src: "http://png-2.findicons.com/files/icons/2427/retina/64/plus.png"
+    }))
 
     var content = new View({
         backgroundColor: false,
@@ -78,28 +93,42 @@
         text: "Friend Requests"
     }));
 
-    friendRequestTitle.addSubview(new ImageView({
-        metrics: {
-            x:-20,
-            y: 15,
-            height:15,
-            width:15,
-
-            scalar: {
-                x:1
-            }
-        },
-        src: "http://www.polyvore.com/cgi/img-thing?.out=jpg&size=l&tid=33839070"
-    }));
-
     contentList.addSubview(friendRequestTitle);
+    if (getFriendRequestData().data.length > 0) {
 
-    var friendrequests = getFriendRequests();
+        var friendrequests = getFriendRequests();
+        for (var i = 0; i < friendrequests.length; i++) {
+            contentList.addSubview(friendrequests[i]);
+        }
+    } else {
+        var noFriends = new View({
+            metrics: {
+                x: 0,
+                y: 0,
+                height: 100,
+                scalar: {
+                    width: 1
+                }
+            },
+            backgroundColor:"#f7f7f7"
+        })
 
-    for (var i = 0; i < friendrequests.length; i++) {
-        contentList.addSubview(friendrequests[i]);
+        noFriends.addSubview(new TextView({
+            metrics: {
+                x: 0,
+                y: 42.5,
+                scalar: {
+                    width: 1,
+                    height: 1
+                }
+            },
+            justify: "center",
+            text:"No Friend Requests"
+        }))
+
+        contentList.addSubview(noFriends);
+
     }
-
     knowPeople = new View({
         backgroundColor: "#f7f7f7",
         metrics: {
@@ -157,10 +186,15 @@
         },
         text: "See All",
         fontSize:12,
-        color:"#3b5998"
+        color: "#3b5998",
+        decoration: "bold"
     }))
 
     contentList.addSubview(seeAll);
+
+    navBar = getNavBar();
+
+    contentList.addSubview(navBar)
 
     content.addSubview(contentList);
 
@@ -207,7 +241,8 @@
                     }
                 },
                 text: friendrequest.name,
-                color: "#3b5998"
+                color: "#3b5998",
+                decoration: "bold"
             }));
 
             friendRequestRow.addSubview(new TextView({
@@ -248,7 +283,8 @@
                 },
                 justify: "center",
                 text: "Confirm",
-                color: "white"
+                color: "white",
+                fontSize: 12
             }));
 
             var deleteFriend = new View({
@@ -272,7 +308,8 @@
                 },
                 justify: "center",
                 text: "Delete",
-                color: "black"
+                color: "black",
+                fontSize: 12
             }));
 
             friendRequestRow.addSubview(confirmFriend);
@@ -294,40 +331,41 @@
                 metrics: {
                     x: 0,
                     y: 0,
-                    height: 50,
+                    height: 100,
                     scalar: {
                         width: 1
                     }
                 },
-                strokeColor: "gray"
+                strokeColor: "white"
             })
 
             knowPeopleRow.addSubview(new ImageView({
                 metrics: {
                     x: 10,
-                    y: 5,
-                    width: 40,
-                    height: 40
+                    y: 12.5,
+                    width: 75,
+                    height: 75
                 },
                 src: knowperson.img
             }));
 
             knowPeopleRow.addSubview(new TextView({
                 metrics: {
-                    x: 60,
-                    y: 10,
+                    x: 100,
+                    y: 35,
                     height: 30,
                     scalar: {
                         width: 1
                     }
                 },
-                text: knowperson.name
+                text: knowperson.name,
+                decoration: "bold"
             }));
 
             knowPeopleRow.addSubview(new TextView({
                 metrics: {
-                    x: 60,
-                    y: 30,
+                    x: 100,
+                    y: 55,
                     height: 20,
                     scalar: {
                         width: 1
@@ -342,7 +380,7 @@
                 backgroundColor: "#3b5998",
                 metrics: {
                     x:-85,
-                    y: 15,
+                    y: 35,
                     height: 25,
                     width: 75,
                     scalar: {
@@ -354,7 +392,7 @@
             addFriend.addSubview(new TextView({
                 metrics: {
                     x: 0,
-                    y: 7.5,
+                    y: 7,
                     scalar: {
                         width: 1,
                         height: 1
@@ -406,6 +444,282 @@
                     "numMutFriends": 52
                 }
             ]
+        }
+    }
+
+    function getNavBar() {
+        var navBar = new ListView({
+            metrics: {
+                x: 0,
+                y: -45.5,
+                height: 45.5,
+                scalar: {
+                    y: 1,
+                    width: 1
+                }
+            },
+            horizontal: true
+        });
+
+        var fbBlue = "#3B5998"
+        var darkBlue = "#243c6d"
+
+        var focus = "notifications";
+        var focusImg = notificationsTab;
+        var focusWrapper = notificationsTabWrapper;
+
+        // Tab 1 - Newsfeed
+        var newsfeedTab = new ImageView({
+            metrics: {
+                width: 20,
+                height: 20,
+                x: -10,
+                y: -10,
+                scalar: {
+                    x: 0.5,
+                    y: 0.5
+                }
+            },
+            src: "imgs/newsfeed.png"
+        });
+        var newsfeedTabWrapper = new View({
+            backgroundColor: fbBlue,
+            strokeColor: fbBlue,
+            metrics: {
+                x: 0,
+                y: 0,
+                scalar: {
+                    width: 0.1667,
+                    height: 1
+                }
+            },
+            click: function (e) {
+                if (focusImg) {
+                    focusImg.setSrc(deselect(focus));
+                    focusWrapper.backgroundColor = fbBlue
+                }
+                focus = "newsfeed";
+                focusImg = newsfeedTab;
+                focusWrapper = newsfeedTabWrapper;
+                focusWrapper.backgroundColor = darkBlue;
+                focusImg.setSrc("imgs/newsfeed_selected.png");
+            }
+        });
+        newsfeedTabWrapper.addSubview(newsfeedTab);
+
+        var requestsTab = new ImageView({
+            metrics: {
+                width: 20,
+                height: 20,
+                x: -10,
+                y: -10,
+                scalar: {
+                    x: 0.5,
+                    y: 0.5
+                }
+            },
+            src: "imgs/friend_requests.png"
+        });
+        var requestsTabWrapper = new View({
+            backgroundColor: fbBlue,
+            strokeColor: fbBlue,
+            metrics: {
+                x: 0,
+                y: 0,
+                scalar: {
+                    width: 0.1667,
+                    height: 1
+                }
+            },
+            click: function (e) {
+                if (focusImg) {
+                    focusImg.setSrc(deselect(focus));
+                    focusWrapper.backgroundColor = fbBlue;
+                }
+                focus = "requests";
+                focusImg = requestsTab;
+                focusWrapper = requestsTabWrapper;
+                focusWrapper.backgroundColor = darkBlue;
+                focusImg.setSrc("imgs/friend_requests_selected.png");
+            }
+        });
+        requestsTabWrapper.addSubview(requestsTab);
+
+        var messagesTab = new ImageView({
+            metrics: {
+                width: 20,
+                height: 20,
+                x: -10,
+                y: -10,
+                scalar: {
+                    x: 0.5,
+                    y: 0.5
+                }
+            },
+            src: "imgs/messenger.png"
+        });
+        var messagesTabWrapper = new View({
+            backgroundColor: fbBlue,
+            strokeColor: fbBlue,
+            metrics: {
+                x: 0,
+                y: 0,
+                scalar: {
+                    width: 0.1667,
+                    height: 1
+                }
+            },
+            click: function (e) {
+                if (focusImg) {
+                    focusImg.setSrc(deselect(focus));
+                    focusWrapper.backgroundColor = fbBlue;
+                }
+                focus = "messages";
+                focusImg = messagesTab;
+                focusWrapper = messagesTabWrapper;
+                focusWrapper.backgroundColor = darkBlue;
+                focusImg.setSrc("imgs/messenger_selected.png");
+            }
+        });
+        messagesTabWrapper.addSubview(messagesTab);
+
+        var notificationsTab = new ImageView({
+            metrics: {
+                width: 20,
+                height: 20,
+                x: -10,
+                y: -10,
+                scalar: {
+                    x: 0.5,
+                    y: 0.5
+                }
+            },
+            src: "imgs/notifications.png"
+        });
+        var notificationsTabWrapper = new View({
+            backgroundColor: fbBlue,
+            strokeColor: fbBlue,
+            metrics: {
+                x: 0,
+                y: 0,
+                scalar: {
+                    width: 0.1667,
+                    height: 1
+                }
+            },
+            click: function (e) {
+                if (focusImg) {
+                    focusImg.setSrc(deselect(focus));
+                    focusWrapper.backgroundColor = fbBlue;
+                }
+                focus = "notifications";
+                focusImg = notificationsTab;
+                focusWrapper = notificationsTabWrapper;
+                focusWrapper.backgroundColor = darkBlue;
+                focusImg.setSrc("imgs/notifications_selected.png");
+            }
+        });
+        notificationsTabWrapper.addSubview(notificationsTab);
+
+        var searchTab = new ImageView({
+            metrics: {
+                width: 20,
+                height: 20,
+                x: -10,
+                y: -10,
+                scalar: {
+                    x: 0.5,
+                    y: 0.5
+                }
+            },
+            src: "imgs/search.png"
+        });
+        var searchTabWrapper = new View({
+            backgroundColor: fbBlue,
+            strokeColor: fbBlue,
+            metrics: {
+                x: 0,
+                y: 0,
+                scalar: {
+                    width: 0.1667,
+                    height: 1
+                }
+            },
+            click: function (e) {
+                if (focusImg) {
+                    focusImg.setSrc(deselect(focus));
+                    focusWrapper.backgroundColor = fbBlue;
+                }
+                focus = "search";
+                focusImg = searchTab;
+                focusWrapper = searchTabWrapper;
+                focusWrapper.backgroundColor = darkBlue;
+                focusImg.setSrc("imgs/search_selected.png");
+            }
+        });
+        searchTabWrapper.addSubview(searchTab);
+
+        var moreTab = new ImageView({
+            metrics: {
+                width: 20,
+                height: 20,
+                x: -10,
+                y: -10,
+                scalar: {
+                    x: 0.5,
+                    y: 0.5
+                }
+            },
+            src: "imgs/more.png"
+        });
+        var moreTabWrapper = new View({
+            backgroundColor: fbBlue,
+            strokeColor: fbBlue,
+            metrics: {
+                x: 0,
+                y: 0,
+                scalar: {
+                    width: 0.1667,
+                    height: 1
+                }
+            },
+            click: function (e) {
+                if (focusImg) {
+                    focusImg.setSrc(deselect(focus));
+                    focusWrapper.backgroundColor = fbBlue;
+                }
+                focus = "more";
+                focusImg = moreTab;
+                focusWrapper = moreTabWrapper;
+                focusWrapper.backgroundColor = darkBlue;
+                focusImg.setSrc("imgs/more_selected.png");
+            }
+        });
+        moreTabWrapper.addSubview(moreTab);
+
+        navBar.addSubview(newsfeedTabWrapper);
+        navBar.addSubview(requestsTabWrapper);
+        navBar.addSubview(messagesTabWrapper);
+        navBar.addSubview(notificationsTabWrapper);
+        navBar.addSubview(searchTabWrapper);
+        navBar.addSubview(moreTabWrapper);
+
+        return navBar;
+    }
+
+    function deselect(focus) {
+        if (focus == "newsfeed") {
+            return "imgs/newsfeed.png"
+        } else if (focus == "requests") {
+            return "imgs/friend_requests.png"
+        } else if (focus == "messages") {
+            return "imgs/messenger.png"
+        } else if (focus == "notifications") {
+            return "imgs/notifications.png"
+        } else if (focus == "search") {
+            return "imgs/search.png"
+        } else if (focus == "more") {
+            return "imgs/more.png"
         }
     }
 })();
