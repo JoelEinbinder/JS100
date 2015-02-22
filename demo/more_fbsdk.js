@@ -1,4 +1,6 @@
-function init(){
+var root;
+function initPage(){
+    console.log("Init called!");
     (function () {
         root = new View();
 
@@ -868,4 +870,6 @@ function init(){
         }
 
     })();
+
+    return root;
 }
