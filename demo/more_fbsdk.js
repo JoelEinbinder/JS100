@@ -82,56 +82,53 @@ function initPage(){
 
         var profile = getPanels(panelData.data[0]);
         var favorites = getPanels(panelData.data[1]);
-        var groupsData, groups; 
-        getEndpoint("/me/groups", function(response){
-      
-              if (response && !response.error) {
-                /* handle the result */
-                console.log("Handling response!");
+        getEndpointWrapper("/me/groups", "GROUPS")
+        // getEndpoint("/me/groups", function(response){
+        //     var groupsData, groups; 
+        //       if (response && !response.error) {
+        //         /* handle the result */
+        //         console.log("Handling response!");
                 
-                console.log(response);
+        //         console.log(response);
 
-                //groupsData = response;
-                
+        //         group = new View({
+        //             backgroundColor: "#f7f7f7",
+        //             metrics: {
+        //                 x: 0,
+        //                 y: 0,
+        //                 height: 25,
+        //                 scalar: {
+        //                     width: 1
+        //                 }
+        //             },
+        //             strokeColor: "gray"
+        //         });
 
-                group = new View({
-                    backgroundColor: "#f7f7f7",
-                    metrics: {
-                        x: 0,
-                        y: 0,
-                        height: 25,
-                        scalar: {
-                            width: 1
-                        }
-                    },
-                    strokeColor: "gray"
-                });
+        //         group.addSubview(new TextView({
+        //             metrics: {
+        //                 x: 5,
+        //                 y: 5,
+        //                 scalar: {
+        //                     height: 1,
+        //                     width: 1
+        //                 }
+        //             },
+        //             text: "GROUPS",
+        //             fontSize: 12
+        //         }))
 
-                group.addSubview(new TextView({
-                    metrics: {
-                        x: 5,
-                        y: 5,
-                        scalar: {
-                            height: 1,
-                            width: 1
-                        }
-                    },
-                    text: "GROUPS",
-                    fontSize: 12
-                }))
+        //         contentList.addSubview(group);
 
-                contentList.addSubview(group);
-
-                //groups = getPanelsMod(response);
-                getPanelsMod(response);
-                /*for (var i = 0; i < groups.length; i++) {
-                    contentList.addSubview(groups[i]);
-                }*/
+        //         //groups = getPanelsMod(response);
+        //         getPanelsMod(response);
+        //         /*for (var i = 0; i < groups.length; i++) {
+        //             contentList.addSubview(groups[i]);
+        //         }*/
 
 
-            }
+        //     }
 
-        });
+        // });
         var apps = getPanels(panelData.data[3])
         var friends = getPanels(panelData.data[4])
         var interests = getPanels(panelData.data[5])
@@ -347,6 +344,52 @@ function initPage(){
         navBar = getNavBar();
 
         content.addSubview(navBar)
+
+        function getEndpointWrapper(endpoint, clusterText){
+
+            getEndpoint(endpoint, function(response){
+                    
+                  if (response && !response.error) {
+                    /* handle the result */
+                    console.log("Handling response!");
+                    
+                    console.log(response);
+
+                    var cluster = new View({
+                        backgroundColor: "#f7f7f7",
+                        metrics: {
+                            x: 0,
+                            y: 0,
+                            height: 25,
+                            scalar: {
+                                width: 1
+                            }
+                        },
+                        strokeColor: "gray"
+                    });
+
+                    cluster.addSubview(new TextView({
+                        metrics: {
+                            x: 5,
+                            y: 5,
+                            scalar: {
+                                height: 1,
+                                width: 1
+                            }
+                        },
+                        text: clusterText,
+                        fontSize: 12
+                    }))
+
+                    contentList.addSubview(cluster);
+
+                    getPanelsMod(response);
+
+
+                }
+
+            });
+        }
 
         function getPanelsMod(data) {
             var panel = [];
@@ -921,3 +964,4 @@ function initPage(){
 
     return root;
 }
+
