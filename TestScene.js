@@ -36,7 +36,7 @@ var tv = new TextView({
 
 var sv = new ScrollView({
     metrics:{
-        x:100,y:20,width:50,height:50
+        x:100,y:20,width:200,height:80
     }
 });
 root.addSubview(sv);
@@ -44,7 +44,9 @@ var li = new ListView({
     metrics: {
         x: 0,
         y: 0,
-        width: 50
+        scalar:{
+            width:1
+        }
     },
     resizesToContent:true
 });
@@ -56,6 +58,12 @@ li.addSubview(new TextView({
         }
     },
     text:"woo lol ollolool adsf"
+    +"woo lol ollolool adsf"
+        +"woo lol ollolool adsf"
+        +"woo lol ollolool adsf"
+        +"woo lol ollolool adsf"
+        +"woo lol ollolool adsf"
+
 }));
 li.addSubview(new ImageView({
     metrics:{
