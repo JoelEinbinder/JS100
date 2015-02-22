@@ -139,11 +139,12 @@ function getEndpoint(endpoint) {
   FB.api(
     endpoint,
     function (response) {
-      console.log(response);
+      
       if (response && !response.error) {
         /* handle the result */
         console.log("Handling response!");
         
+        console.log(response);
 
         /*
         for(datum in response.data){
