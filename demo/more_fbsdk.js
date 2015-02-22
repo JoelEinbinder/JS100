@@ -93,6 +93,41 @@ function initPage(){
 
                 //groupsData = response;
                 groups = getPanelsMod(response);
+
+                group = new View({
+            backgroundColor: "#f7f7f7",
+            metrics: {
+                x: 0,
+                y: 0,
+                height: 25,
+                scalar: {
+                    width: 1
+                }
+            },
+            strokeColor: "gray"
+        });
+
+        group.addSubview(new TextView({
+            metrics: {
+                x: 5,
+                y: 5,
+                scalar: {
+                    height: 1,
+                    width: 1
+                }
+            },
+            text: "GROUPS",
+            fontSize: 12
+        }))
+
+
+        contentList.addSubview(group);
+
+        for (var i = 0; i < groups.length; i++) {
+            contentList.addSubview(groups[i]);
+        }
+
+
               }
 
         });
@@ -139,38 +174,7 @@ function initPage(){
             contentList.addSubview(favorites[i]);
         }
 
-        group = new View({
-            backgroundColor: "#f7f7f7",
-            metrics: {
-                x: 0,
-                y: 0,
-                height: 25,
-                scalar: {
-                    width: 1
-                }
-            },
-            strokeColor: "gray"
-        });
-
-        group.addSubview(new TextView({
-            metrics: {
-                x: 5,
-                y: 5,
-                scalar: {
-                    height: 1,
-                    width: 1
-                }
-            },
-            text: "GROUPS",
-            fontSize: 12
-        }))
-
-
-        contentList.addSubview(group);
-
-        for (var i = 0; i < groups.length; i++) {
-            contentList.addSubview(groups[i]);
-        }
+        
 
         app = new View({
             backgroundColor: "#f7f7f7",
