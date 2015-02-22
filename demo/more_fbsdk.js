@@ -91,8 +91,8 @@ function initPage(){
                 
                 console.log(response);
 
-                groupsData = response;
-                groups = getPanelsMod(groupsData);
+                //groupsData = response;
+                groups = getPanelsMod(response);
               }
 
         });
