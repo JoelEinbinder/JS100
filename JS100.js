@@ -685,8 +685,6 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
         scroll: function(dx,dy){
             this.scrollx += dx;
             this.scrolly += dy;
-            this.scrollx = Math.max(this.scrollx,0);
-            this.scrolly = Math.max(this.scrolly,0);
             var innerWidth = 0;
             var innerHeight = 0;
             for (var i = 0; i < this.subviews.length; i++){
@@ -695,6 +693,8 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             }
             this.scrollx = Math.min(this.scrollx,innerWidth - this.frame.width);
             this.scrolly = Math.min(this.scrolly,innerHeight - this.frame.height);
+            this.scrollx = Math.max(this.scrollx,0);
+            this.scrolly = Math.max(this.scrolly,0);
             this.setDirty();
         },
         mousedrag: function(e){
