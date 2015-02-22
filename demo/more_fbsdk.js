@@ -359,7 +359,7 @@ function initPage(){
 
             if(data.data === undefined || undefined === data.data.length){
                 //None to draw!
-                content.log("No content to populate with!");
+                console.log("No content to populate with!");
                 var panelRow = new View({
                     metrics: {
                         x: 0,
