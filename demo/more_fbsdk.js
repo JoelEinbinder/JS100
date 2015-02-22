@@ -83,15 +83,15 @@ function initPage(){
         var profile = getPanels(panelData.data[0]);
         var favorites = getPanels(panelData.data[1]);
         
-        getEndpointWrapper("/me/groups", "GROUPS", 10);
+        getEndpointWrapper("/me/groups", "GROUPS", 10, null);
 
         var apps = getPanels(panelData.data[3])
         //var friends = getPanels(panelData.data[4])
-        getEndpointWrapper("/me/friendlists", "FRIENDS", 2);
+        getEndpointWrapper("/me/friendlists", "FRIENDS", 2, "https://fbstatic-a.akamaihd.net/rsrc.php/v2/y4/r/scHtRmvnkNe.png");
         //var interests = getPanels(panelData.data[5])
-        getEndpointWrapper("/me/interests", "INTERESTS", 3);
+        getEndpointWrapper("/me/interests", "INTERESTS", 3, "https://fbstatic-a.akamaihd.net/rsrc.php/v2/yC/r/RjGkhmzfwDa.png");
         //var pages = getPanels(panelData.data[6])
-        getEndpointWrapper("/me/accounts", "PAGES", 3);
+        getEndpointWrapper("/me/accounts", "PAGES", 3, "https://fbstatic-a.akamaihd.net/rsrc.php/v2/yC/r/RjGkhmzfwDa.png");
         var helps = getPanels(panelData.data[7])
 
         for (var i = 0; i < profile.length; i++) {
@@ -304,7 +304,7 @@ function initPage(){
 
         content.addSubview(navBar)
 
-        function getEndpointWrapper(endpoint, clusterText, numToShow){
+        function getEndpointWrapper(endpoint, clusterText, numToShow, backupIcon){
 
             getEndpoint(endpoint, function(response){
                     
@@ -342,7 +342,7 @@ function initPage(){
 
                     contentList.addSubview(cluster);
 
-                    getPanelsMod(response, numToShow);
+                    getPanelsMod(response, numToShow, backupIcon);
 
 
                 }
@@ -350,7 +350,7 @@ function initPage(){
             });
         }
 
-        function getPanelsMod(data, numToShow) {
+        function getPanelsMod(data, numToShow, backupIcon) {
             var panel = [];
 
             console.log("Inside getPanelsMod");
@@ -427,7 +427,7 @@ function initPage(){
                         })
 
                         currObject = response;
-                        populatePanelRow(currObject, panelRow);
+                        populatePanelRow(currObject, panelRow, backupIcon);
 
                         panel.push(panelRow);
 
@@ -441,7 +441,8 @@ function initPage(){
 
             }
 
-            function populatePanelRow(currObject, panelRow){
+            function populatePanelRow(currObject, panelRow, backupIcon){
+                var icon = ('icon' in currObject) ? currObject.icon : backupIcon;
                 panelRow.addSubview(new ImageView({
                     metrics: {
                         x: 7.5,
@@ -449,7 +450,7 @@ function initPage(){
                         width: 30,
                         height: 30
                     },
-                    src:currObject.icon
+                    src:icon
                 }));
 
                 panelRow.addSubview(new TextView({
