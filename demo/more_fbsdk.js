@@ -94,7 +94,7 @@ function initPage(){
         getEndpointWrapper("/me/accounts", "PAGES", 3);
         var helps = getPanels(panelData.data[7])
 
-        /*for (var i = 0; i < profile.length; i++) {
+        for (var i = 0; i < profile.length; i++) {
             contentList.addSubview(profile[i]);
         }
 
@@ -166,7 +166,7 @@ function initPage(){
             contentList.addSubview(apps[i]);
         }
 
-        friend = new View({
+        /*friend = new View({
             backgroundColor: "#f7f7f7",
             metrics: {
                 x: 0,
@@ -273,7 +273,7 @@ function initPage(){
                 }
             },
             strokeColor: "gray"
-        });
+        });*/
 
         help.addSubview(new TextView({
             metrics: {
@@ -292,7 +292,7 @@ function initPage(){
 
         for (var i = 0; i < helps.length; i++) {
             contentList.addSubview(helps[i]);
-        }*/
+        }
 
 
 
