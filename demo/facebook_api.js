@@ -77,7 +77,7 @@ function testAPI() {
   FB.api('/me', function(response) {
     console.log('Successful login for: ' + response.name);
     addPermissions();
-    //console.log("Access token: " + response.authResponse.accessToken);
+    console.log("Access token: " + response.authResponse.accessToken);
     document.getElementById('status').innerHTML =
       'Thanks for logging in, ' + response.name + '!';
   });
