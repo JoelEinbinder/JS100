@@ -396,7 +396,7 @@ function morejs() {
 
     var panelData = getPanelData();
 
-    var profile = getPanels(panelData.data[0]);
+//    var profile = getPanels(panelData.data[0]);
     var favorites = getPanels(panelData.data[1]);
     var groups = getPanels(panelData.data[2]);
     var apps = getPanels(panelData.data[3]);
@@ -405,9 +405,9 @@ function morejs() {
     var pages = getPanels(panelData.data[6]);
     var helps = getPanels(panelData.data[7]);
 
-    for (var i = 0; i < profile.length; i++) {
+/*    for (var i = 0; i < profile.length; i++) {
         contentList.addSubview(profile[i]);
-    }
+    }*/
 
     var favorite = new View({
         backgroundColor: "#f7f7f7",
@@ -715,15 +715,6 @@ function morejs() {
     function getPanelData() {
         return {
             data: [
-                { // No header, profile information
-                    "numPanels": 1,
-                    "panels": {
-                        "img": ["http://img1.wikia.nocookie.net/__cb20141108074537/powerlisting/images/5/5e/Amy-the-secret-life-of-the-american-teenager-19852399-500-375.jpg"],
-                        "name": ["Matt Ho"],
-                        "notification": [false],
-                        "numNotification": [0]
-                    }
-                },
                 { // Favorites
                     "numPanels": 6,
                     "panels": {
