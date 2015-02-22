@@ -87,7 +87,7 @@ function initPage(){
 
         var apps = getPanels(panelData.data[3])
         //var friends = getPanels(panelData.data[4])
-        //getEndpointWrapper("/me/friendlists", "FRIENDS", 2);
+        getEndpointWrapper("/me/friendlists", "FRIENDS", 2);
         //var interests = getPanels(panelData.data[5])
         getEndpointWrapper("/me/interests", "INTERESTS", 3);
         //var pages = getPanels(panelData.data[6])
