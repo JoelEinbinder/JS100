@@ -116,11 +116,11 @@ function getNotifications() {
       if (response && !response.error) {
         /* handle the result */
 
-        console.print(response);
+        console.log(response);
 
         for(notification in response){
           console("\nNew notification:");
-          console.print(notification);
+          console.log(notification);
         }
       }
     }
