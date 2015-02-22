@@ -85,7 +85,7 @@ function testAPI() {
     setTimeout(function(){
         getNotifications();
 
-      },0);
+      },1000);
   });
 
   
