@@ -107,7 +107,7 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
                         editor = new RTE(this.focus[prop] + "");
                     else
                         editor = new RTE('"' + this.focus[prop] + '"\n');
-                    console.log(this.focus,prop,editor);
+                    //console.log(this.focus,prop,editor);
                     editor.prop = prop;
                     this.addSubview(editor);
                     this.scroll(0,0);
@@ -701,6 +701,11 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
             if (e.which != 0){
                 this.scroll(-e.movementX, -e.movementY);
             }
+        },
+        touchmove: function(e){
+            if (e.touches.length == 1){
+                this.scroll(-e.clientX,-e.clientY)
+            }
         }
     });
     ImageView = function(e){
@@ -798,6 +803,35 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
     });*/
     var lastx, lasty, target;
     canvas.addEventListener("click",eventPasser);
+    canvas.addEventListener("touchmove",function(e){
+        if (e.touches.length >= 1) {
+
+            if (target) {
+
+                e.touches[0].movementX = e.touches[0].clientX - lastx;
+                e.touches[0].movementY = e.touches[0].clientY - lasty;
+                lastx = e.touches[0].clientX;
+                lasty = e.touches[0].clientY;
+                target.mousedrag(e.touches[0]);
+            }
+        }
+    });
+    canvas.addEventListener("touchend",dragdone);
+    canvas.addEventListener("touchstart",function(e){
+        if (e.touches.length == 1) {
+            var x = e.touches[0].clientX;
+            var y = e.touches[0].clientY;
+            lastx = x;
+            lasty = y;
+            var hit = false;
+            if (root)
+                hit = root.hitTest(x, y, "mousedrag");
+
+            target = hit;
+        }
+    });
+    canvas.addEventListener("touchcancel",dragdone);
+    canvas.addEventListener("touchleave",dragdone);
     canvas.addEventListener("mousedown",function(e){
         var x = e.clientX;
         var y = e.clientY;
@@ -809,7 +843,6 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
 
         target = hit;
     });
-
     canvas.addEventListener("mousemove",function(e){
         if (target) {
             e.movementX = e.clientX - lastx;
@@ -827,7 +860,12 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
     });
     canvas.addEventListener("mouseup",dragdone);
     canvas.addEventListener("mouseout",dragdone);
-    function dragdone(){
+    function dragdone(e){
+        if (e.touches.length == 1){
+            if (root.hitTest(e.touches[0].clientX, e.touches[0].clientY, "click") == target){
+                target.click(e.touches[0]);
+            }
+        }
         target = false;
     }
     function eventPasser(e){
@@ -839,14 +877,14 @@ var root, View, TextView, ResizingView, ListView, ScrollView;
         else if (root)
             hit = root.hitTest(x,y, e.type);
 
-        console.log(e.type,hit);
+        //console.log(e.type,hit);
         if (hit)
             hit[e.type](e);
     }
     document.addEventListener("keydown", function(e){
         if (e.ctrlKey && e.which == 65){
             if (editor){
-                console.log("got editor!")
+                //console.log("got editor!")
                 panel.focus[editor.prop] = eval("["+editor.getText()+"]")[0];
                 panel.focus.refreshFrame();
                 panel.focus.setDirty();
