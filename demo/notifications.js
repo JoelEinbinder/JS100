@@ -285,6 +285,22 @@
         navBar.addSubview( searchTabWrapper );
         navBar.addSubview( moreTabWrapper );
 
+        function deselect( focus ) {
+            if ( focus == "newsfeed" ) {
+                return "imgs/newsfeed.png"
+            } else if ( focus == "requests" ) {
+                return "imgs/friend_requests.png"
+            } else if ( focus == "messages" ) {
+                return "imgs/messenger.png"
+            } else if ( focus == "notifications" ) {
+                return "imgs/notifications.png"
+            } else if ( focus == "search" ) {
+                return "imgs/search.png"
+            } else if ( focus == "more" ) {
+                return "imgs/more.png"
+            }
+        }
+
         return navBar;
     }
     function getTitleBar() {
@@ -428,7 +444,7 @@
                 "viewed": false
                 },
                 {
-                "img": "imgs/lincoln.jpg",
+                "img": "imgs/miley.jpg",
                 "desc": "Miley Cyrus added a new video.",
                 "iconImg": "imgs/content.png",
                 "when": new Date().getTime() - Math.floor(100000*Math.random()),
@@ -444,19 +460,4 @@
         return dateTokens[1] + " " + dateTokens[2] + " at " + dateTokens[4]
     }
 
-    function deselect( focus ) {
-        if ( focus == "newsfeed" ) {
-            return "imgs/newsfeed.png"
-        } else if ( focus == "requests" ) {
-            return "imgs/friend_requests.png"
-        } else if ( focus == "messages" ) {
-            return "imgs/messenger.png"
-        } else if ( focus == "notifications" ) {
-            return "imgs/notifications.png"
-        } else if ( focus == "search" ) {
-            return "imgs/search.png"
-        } else if ( focus == "more" ) {
-            return "imgs/more.png"
-        }
-    }
 })();
